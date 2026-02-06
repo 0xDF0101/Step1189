@@ -1,0 +1,25 @@
+
+spring:
+  datasource:
+    # H2 메모리 사용
+    url: jdbc:h2:mem:step1189;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true # 웹 콘솔 사용할 수 있게 함
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create # 혹은 update
+    show-sql: true # 콘솔에서 날아가는 SQL 쿼리문을 보여줌
+    properties:
+      hibernate:
+        format_sql: true # SQL을 보기좋게 정렬해서 보여줌
+    defer-datasource-initialization: true # Hibernate 초기화 후 data.sql 실행
+
+  sql:
+    init:
+      mode: always # 항상 실행
