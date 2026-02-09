@@ -67,3 +67,6 @@ INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (63
 INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (64, '요한삼서', '3 John', 1, 'NEW');
 INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (65, '유다서', 'Jude', 1, 'NEW');
 INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (66, '요한계시록', 'Revelation', 22, 'NEW');
+
+INSERT INTO users(nickname, email, role, is_public, status_message, provider, provider_id) VALUES ('Eugene', 'eugene@gmail.com', 'ADMIN', true, '끼얏호', 'google', '132434');
+INSERT INTO users(nickname, email, role, is_public, status_message, provider, provider_id) VALUES ('Suin', 'suin@gmail.com', 'USER', true, '야호', 'naver', '234231');

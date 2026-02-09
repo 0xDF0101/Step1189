@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.model.Role;
+import org.example.user.dto.UserCreateRequest;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -45,7 +46,7 @@ public class User {
     private Boolean publicStatus = true;
 
     // 상태 메시지 같은거
-    private String goalMessage;
+    private String statusMessage;
 
     // 프로필 이미지 링크
     private String profileImgUrl;
@@ -64,5 +65,14 @@ public class User {
     // OAuth 제공자 ID
     @Column(nullable = false)
     private String providerId;
+
+    public User(UserCreateRequest request) {
+        this.email = request.email();
+        this.nickname = request.nickname();
+        this.statusMessage = request.statusMessage();
+        this.provider = "Google";
+        this.providerId = "000000";
+        this.role = Role.USER;
+    }
 
 }

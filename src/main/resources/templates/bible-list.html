@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Step 1189 | 성경 목록</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { color: #38bdf8; text-align: center; margin-bottom: 30px; }
+
+        /* 구약/신약 구분 탭 느낌 */
+        .section-title { font-size: 1.5rem; color: #94a3b8; border-bottom: 2px solid #334155; padding-bottom: 10px; margin: 40px 0 20px; }
+
+        /* 그리드 레이아웃 */
+        .bible-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        /* 성경 카드 스타일 */
+        .bible-card {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid #334155;
+        }
+        .bible-card:hover { border-color: #38bdf8; transform: translateY(-3px); background: #2d3e5a; }
+        .bible-name { font-weight: bold; font-size: 1.1rem; display: block; }
+        .bible-eng { font-size: 0.8rem; color: #64748b; }
+
+        /* 장 선택 레이어 (모달이나 드롭다운 대신 간단하게 구현) */
+        .chapter-container {
+            display: none;
+            background: #0f172a;
+            grid-column: 1 / -1;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px dashed #38bdf8;
+            margin-top: 10px;
+        }
+        .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 8px; }
+        .chapter-btn {
+            background: #334155; color: white; border: none; padding: 8px;
+            border-radius: 6px; cursor: pointer; font-size: 0.9rem;
+        }
+        .chapter-btn:hover { background: #38bdf8; color: #0f172a; }
+        .active { display: block !important; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Step 1189 성경 읽기 📖</h1>
+
+    <div class="section-title">구약 성경 (Old Testament)</div>
+    <div class="bible-grid">
+        <div th:each="bible : ${bibles}" th:if="${bible.testament.name() == 'OLD'}" class="bible-card"
+             th:onclick="'toggleChapters(' + ${bible.id} + ')'">
+            <span class="bible-name" th:text="${bible.korName}">창세기</span>
+            <span class="bible-eng" th:text="${bible.engName}">Genesis</span>
+
+            <div th:id="'chapters-' + ${bible.id}" class="chapter-container">
+                <p th:text="${bible.korName} + ' 장 선택'"></p>
+                <div class="chapter-grid">
+                    <button th:each="i : ${#numbers.sequence(1, bible.totalChapter)}"
+                            class="chapter-btn"
+                            th:text="${i}"
+                            th:onclick="|recordProgress(${bible.id}, ${i})|">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">신약 성경 (New Testament)</div>
+    <div class="bible-grid">
+        <div th:each="bible : ${bibles}" th:if="${bible.testament.name() == 'NEW'}" class="bible-card"
+             th:onclick="'toggleChapters(' + ${bible.id} + ')'">
+            <span class="bible-name" th:text="${bible.korName}">마태복음</span>
+            <span class="bible-eng" th:text="${bible.engName}">Matthew</span>
+
+            <div th:id="'chapters-' + ${bible.id}" class="chapter-container">
+                <p th:text="${bible.korName} + ' 장 선택'"></p>
+                <div class="chapter-grid">
+                    <button th:each="i : ${#numbers.sequence(1, bible.totalChapter)}"
+                            class="chapter-btn" th:text="${i}"
+                            th:onclick="|recordProgress(${bible.id}, ${i})|">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // 성경 클릭 시 장 목록 보여주기
+    function toggleChapters(id) {
+        const container = document.getElementById('chapters-' + id);
+        const allContainers = document.querySelectorAll('.chapter-container');
+
+        // 다른 게 열려있으면 닫기
+        allContainers.forEach(c => {
+            if(c.id !== 'chapters-' + id) c.classList.remove('active');
+        });
+
+        container.classList.toggle('active');
+        event.stopPropagation(); // 카드 클릭 이벤트가 버튼까지 전달되지 않게 방지
+    }
+
+    // 실제 체크 기록 API 호출 (나중에 구현할 부분)
+    function recordProgress(bibleId, chapter) {
+        alert(bibleId + '번 성경 ' + chapter + '장을 읽으셨군요! 기록을 시작합니다.');
+        // 여기서 fetch() 등을 이용해 서버에 데이터를 보낼 거야!
+    }
+</script>
+</body>
+</html>

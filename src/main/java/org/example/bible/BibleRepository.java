@@ -1,4 +1,4 @@
-package org.example.repository;
+package org.example.bible;
 
 import org.example.entity.Bible;
 import org.springframework.data.jpa.repository.JpaRepository;
