@@ -29,6 +29,7 @@ public class Bible {
     // bible은 사실상 참조를 '당하기'만 하기 때문에 굳이 양방향을 유지할 필요가 없음
 
 
+
     @Column(nullable = false, updatable = false)
     private String korName;
 
