@@ -84,7 +84,7 @@
     }
 
     function recordProgress(bibleId, chapter, btnElement) {
-        fetch('/progress', {
+        fetch('/api/v1/progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ bibleId: bibleId, chapterNumber: chapter })

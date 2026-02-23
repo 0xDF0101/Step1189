@@ -182,7 +182,7 @@
     async function initMain() {
         try {
             // 1. 서버에서 데이터 가져오기 (/main 경로로 JSON 요청)
-            const response = await fetch('/api/main', {
+            const response = await fetch('/api/v1/main', {
                 headers: { 'Accept': 'application/json' }
             });
             const grassData = await response.json(); // Map<LocalDate, Integer>
