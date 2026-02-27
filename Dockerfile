@@ -1,8 +1,13 @@
-FROM openjdk:21-jdk-slim
+# step01 build
+FROM maven:3.9-eclipse-temurin-21 AS builder
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
+# step02  execute (JRE)
+FROM eclipse-temurin AS build
 WORKDIR /app
 
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FIlE} app.jar
-
+COPY --from=builder /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8080
