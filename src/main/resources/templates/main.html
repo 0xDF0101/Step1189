@@ -140,6 +140,67 @@
         }
 
         .legend-box { width: 10px; height: 10px; border-radius: 2px; }
+        /* --- 메인 대시보드 모바일 최적화 --- */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+
+            .profile-header {
+                flex-direction: column; /* 아바타와 텍스트를 세로로 */
+                text-align: center;
+                gap: 10px;
+            }
+
+            .avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .welcome-text h2 {
+                font-size: 1.4rem;
+            }
+
+            /* 잔디 그래프 카드 설정 */
+            .contribution-card {
+                padding: 15px;
+                overflow: hidden; /* 카드가 삐져나가지 않게 */
+            }
+
+            .grass-wrapper {
+                /* 💡 모바일에서는 옆으로 슥슥 밀어서 볼 수 있게! */
+                overflow-x: auto;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch; /* 아이폰 스크롤 부드럽게 */
+            }
+
+            /* 스크롤바 디자인 (있어야 사용자가 밀 수 있다는 걸 알아!) */
+            .grass-wrapper::-webkit-scrollbar {
+                height: 4px;
+            }
+            .grass-wrapper::-webkit-scrollbar-thumb {
+                background: #d0d7de;
+                border-radius: 10px;
+            }
+
+            .grass-graph {
+                /* 칸을 모바일 터치에 맞게 살짝 키워도 좋아 */
+                grid-template-rows: repeat(7, 14px);
+                grid-auto-columns: 14px;
+                gap: 4px;
+            }
+
+            .day {
+                width: 14px;
+                height: 14px;
+            }
+
+            /* 모바일에서는 툴팁이 터치 시 잠시 보이게 하거나,
+               터치가 불편하면 아예 클릭 시 아래에 날짜가 뜨게 하는 방식이 좋지만
+               우선은 스크롤에 집중하자! */
+        }
     </style>
 </head>
 <body>
@@ -219,7 +280,11 @@
 
             graph.appendChild(dayEl);
             currentDate.setDate(currentDate.getDate() + 1);
+
+            const wrapper = document.querySelector('.grass-wrapper');
+            wrapper.scrollLeft = wrapper.scrollWidth;
         }
+
     }
 
     function getLevelClass(count) {

@@ -2,6 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Step 1189 | Bible Tracker</title>
     <style>
         /* (기존 CSS 그대로 유지) */
@@ -31,6 +32,64 @@
         .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 10px; }
         .chapter-btn { border: 1px solid #e9ecef; padding: 12px 0; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: 0.2s; }
         .active-modal { display: flex !important; }
+
+        /* 1. 기본 컨테이너 여백 조정 */
+        body {
+            padding: 20px 15px; /* 모바일은 여백을 좀 줄이는 게 시원해 보여 */
+        }
+
+        /* 2. 메인 그리드 조정 */
+        .bible-grid {
+            display: grid;
+            /* 폰에서는 2열, 태블릿 이상에선 자동 채우기 */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .bible-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        /* 3. 모바일에서 툴팁 대신 카드의 일부로 보여주기 (선택사항) */
+        /* 모바일은 터치 기반이라 hover 툴팁이 불편해. 아예 보여주거나 터치 시 나오게 해야 해 */
+        @media (max-width: 767px) {
+            .grass-tooltip {
+                position: static; /* 공중에 띄우지 않고 카드 안으로 넣기 */
+                visibility: visible;
+                opacity: 1;
+                width: 100%;
+                transform: none;
+                box-shadow: none;
+                background: transparent;
+                padding: 5px 0 0 0;
+                margin-top: 10px;
+                border-top: 1px solid #f1f3f5;
+            }
+            .tooltip-text { display: none; } /* 모바일선 텍스트 생략 */
+            .grass-grid {
+                grid-template-columns: repeat(10, 1fr); /* 10개씩 정렬 */
+                justify-items: center;
+            }
+            .grass-box {
+                width: 8px; /* 폰에선 약간 작게 */
+                height: 8px;
+            }
+        }
+
+        /* 4. 모달 창 최적화 */
+        .modal-content {
+            width: 95%; /* 폰에서는 거의 꽉 차게 */
+            padding: 20px;
+            max-height: 90vh; /* 조금 더 길게 써도 됨 */
+        }
+
+        .chapter-grid {
+            /* 폰에서는 버튼을 좀 더 크게 해서 터치하기 편하게! */
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        }
     </style>
 </head>
 <body>
@@ -49,11 +108,13 @@
             <div class="grass-tooltip">
                 <span class="tooltip-text" th:text="${bible.korName} + ' Progress'"></span>
                 <div class="grass-grid">
-                    <div th:each="i : ${#numbers.sequence(1, (bible.totalChapter > 50 ? 50 : bible.totalChapter))}"
+                    <div th:each="i : ${#numbers.sequence(1, bible.totalChapter)}"
                          class="grass-box"
                          th:attr="data-chapter=${i}"
-                         th:with="bibleData=${userProgress.get(bible.id.toString())}, count=${bibleData != null ? bibleData.get(i.toString()) : 0}"
-                         th:classappend="${count != null && count > 0 ? 'level-' + (count > 4 ? 4 : count) : 'level-0'}">
+                         th:with="
+            bibleData=${userProgress[bible.id] ?: userProgress[bible.id.toString()]},
+            count=${bibleData != null ? (bibleData[i] ?: bibleData[i.toString()] ?: 0) : 0}"
+                         th:classappend="${'level-' + (count > 4 ? 4 : count)}">
                     </div>
                 </div>
             </div>
