@@ -29,6 +29,11 @@ public class User {
     // cascade가 all일시, user(부모)가 삭제되면 progress(자식)의 테이블도 함께 삭제됨!
     private List<Progress> progressList = new ArrayList<>();
 
+    @Column(length = 100)
+    private String password;
+
+    @Column(name = "social_type", nullable = true)
+    private String socialType;
 
     @Column(name = "nickname",  length = 50, nullable = false)
     private String nickname;
@@ -60,10 +65,6 @@ public class User {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    // OAuth 제공자
-    @Column(nullable = false)
-    private String provider;
-
     // OAuth 제공자 ID
     @Column(nullable = false)
     private String providerId;
@@ -72,11 +73,11 @@ public class User {
         this.name = name;
     }
 
-    public User(String name, String nickname, String email, String provider, String providerId) {
+    public User(String name, String nickname, String email, String socialType, String providerId) {
         this.name = name;
         this.nickname = nickname;
         this.email = email;
-        this.provider = provider;
+        this.socialType = socialType;
         this.providerId = providerId;
         this.role = Role.USER;
     }
@@ -86,7 +87,7 @@ public class User {
         this.name = request.name();
         this.nickname = request.nickname();
         this.statusMessage = request.statusMessage();
-        this.provider = "Google";
+        this.socialType = "Google";
         this.providerId = "000000";
         this.role = Role.USER;
     }

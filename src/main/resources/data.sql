@@ -68,8 +68,8 @@ INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (64
 INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (65, '유다서', 'Jude', 1, 'NEW');
 INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (66, '요한계시록', 'Revelation', 22, 'NEW');
 
-INSERT INTO users(nickname, email, role, is_public, status_message, provider, provider_id) VALUES ('Eugene', 'eugene@gmail.com', 'ADMIN', true, '끼얏호', 'google', '132434');
-INSERT INTO users(nickname, email, role, is_public, status_message, provider, provider_id) VALUES ('Suin', 'suin@gmail.com', 'USER', true, '야호', 'naver', '234231');
+INSERT INTO users(nickname, email, role, is_public, status_message, social_type, provider_id) VALUES ('Eugene', 'eugene@gmail.com', 'ADMIN', true, '끼얏호', 'google', '132434');
+INSERT INTO users(nickname, email, role, is_public, status_message, social_type, provider_id) VALUES ('Suin', 'suin@gmail.com', 'USER', true, '야호', 'naver', '234231');
 
 
 -- 창세기 (1번 성경, 총 50장) : 앞부분 5장 정도 읽은 상태
