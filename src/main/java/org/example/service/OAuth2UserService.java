@@ -63,7 +63,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
          * 실제 Entity에서는 provider가 아닌 SocialType으로 저장됨
          */
 
-//        userRepository.save(user);
         userRepository.saveAndFlush(user); // 쓰기 지연이 일어나버리면 핸들러에서 캐치를 못함
 
         return new DefaultOAuth2User(

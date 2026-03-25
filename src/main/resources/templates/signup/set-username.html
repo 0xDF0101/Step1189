@@ -1,13 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
-<!--    <link rel="stylesheet" href="">-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Step 1189 - 아이디 설정</title>
+    <style>
+        /* 기본 리셋 및 폰트 설정 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa; /* PC에서 볼 때 배경은 살짝 회색 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 📱 모바일 화면 컨테이너 (유진이의 스케치 틀) */
+        .mobile-container {
+            width: 100%;
+            max-width: 430px; /* 아이폰 Pro Max 크기 한계선 */
+            height: 100vh;
+            background-color: #ffffff;
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 제목 스타일 */
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.4;
+            word-break: keep-all;
+        }
+
+        /* 입력 폼 그룹 */
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        /* 텍스트 입력창 */
+        input[type="text"] {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input[type="text"]::placeholder {
+            color: #adb5bd;
+        }
+
+        /* 🌿 입력창 클릭(포커스) 시 우리 시그니처 초록색으로 변경! */
+        input[type="text"]:focus {
+            border-color: #2ea44f;
+            background-color: #f0fff4; /* 아주 연한 초록 배경 */
+        }
+
+        /* 버튼 스타일 */
+        .btn-continue {
+            width: 100%;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: #2ea44f; /* 시그니처 초록색 */
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-continue:hover {
+            background-color: #269044; /* 마우스 올리면 살짝 짙어짐 */
+        }
+
+        /* 나중에 자바스크립트로 띄워줄 피드백 메시지용 */
+        .feedback-msg {
+            font-size: 13px;
+            margin-top: 8px;
+            display: none; /* 평소엔 숨김 */
+        }
+        .text-success { color: #2ea44f; display: block; }
+        .text-error { color: #e03131; display: block; }
+    </style>
 </head>
 <body>
 
-<h1>username 입력 페이지</h1>
+<div class="mobile-container">
+    <h1>사용할 이름을 입력해주세요</h1>
+
+    <form action="/api/v1/users/username" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="username" required autocomplete="off">
+
+        </div>
+
+        <button type="submit" class="btn-continue">Continue</button>
+    </form>
+</div>
 
 </body>
 </html>

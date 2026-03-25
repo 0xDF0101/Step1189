@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class WebControllerAdvice {
 
-
     // 예외처리 이딴 식으로 거지같이 하는게 아닌 거 같은데
     @ExceptionHandler(EntityNotFoundException.class)
     public String handleEntityNotFoundException() {
+        return "error";
+    }
+
+    // 얘도
+    @ExceptionHandler(EmailNotFoundException.class)
+    public String handleEmailNotFoundException() {
         return "error";
     }
 

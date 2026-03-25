@@ -3,6 +3,7 @@ package org.example.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exception.EmailNotFoundException;
 import org.example.model.Role;
 import org.example.repository.UserRepository;
 import org.example.entity.User;
@@ -45,12 +46,6 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(dto.password());
 
-//        User user = new User(
-//                dto.username(),
-//                encodedPassword,
-//                dto.email(),
-//                "Local"
-//        );
         User user = User.builder()
                 .username(dto.username())
                 .password(encodedPassword)
@@ -61,12 +56,22 @@ public class UserService {
 
 
 
-//        userRepository.save(user);
         userRepository.saveAndFlush(user);
 
 
         log.info("user 저장 완료");
     }
+
+    // OAuth로 회원가입 시, username 입력받고 업데이트 하기
+    @Transactional
+    public void updateUsername(String email, String username) {
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException("해당 이메일이 없는데?"));
+
+        user.updateUsernameAndRole(username, Role.USER);
+        // ----> 더티 체킹
+    }
+
 
 
 }

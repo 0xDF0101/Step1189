@@ -71,6 +71,11 @@ public class User {
     // OAuth 제공자 ID
     private String providerId;
 
+    // OAuth 가입했을 시 따로 username 입력받은 경우 써먹음
+    public void updateUsernameAndRole(String username, Role role) {
+        this.username = username;
+        this.role = role;
+    }
 
     public User(UserCreateRequest request) {
         this.email = request.email();
