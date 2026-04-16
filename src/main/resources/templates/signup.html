@@ -54,7 +54,9 @@
 
     <form th:action="@{/api/v1/users}" method="post" id="signupForm">
         <div class="form-group">
+
             <label>이메일</label>
+            <div id="emailError" style="color: red; font-size: 0.8em; margin-bottom: 5px;"></div>
             <input type="email" name="email" id="email" placeholder="example@email.com" required>
             <span class="msg" id="emailMsg"></span>
         </div>
@@ -118,15 +120,27 @@
 
         fetch('/api/v1/users', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // 컨트롤러의 @RequestBody와 짝꿍!
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
-            .then(response => {
+            .then(async response => {
+                // 먼저 에러 메시지창을 초기화 (이전 에러 지우기)
+                const errorElement = document.getElementById("emailError");
+                errorElement.innerText = "";
+
                 if (response.ok) {
                     alert("가입 완료! 🌿");
                     window.location.href = "/login";
+                } else {
+                    // 서버에서 보낸 JSON 에러 메시지를 읽어옴
+                    const errorData = await response.json();
+
+                    // 이메일 중복 같은 특정 필드 에러라면?
+                    if (errorData.field === "email" || response.status === 409) {
+                        errorElement.innerText = errorData.message || "이미 존재하는 이메일입니다.";
+                    } else {
+                        alert("문제가 발생했습니다. 다시 시도해주세요.");
+                    }
                 }
             })
             .catch(error => console.error("Error:", error));

@@ -1,14 +1,19 @@
 package org.example.controller.api;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exception.EmailDuplicateException;
 import org.example.service.UserService;
 import org.example.dto.user.UserCreateRequest;
 import org.example.dto.user.UserInfo;
+import org.example.validator.UserEmailDuplicateValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -17,6 +22,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final UserEmailDuplicateValidator validator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
+    }
 
     @ResponseBody
     @GetMapping("/users/{userId}")
@@ -42,7 +53,11 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/api/v1/users")
-    public ResponseEntity<Void> createUser(@RequestBody UserCreateRequest request) {
+    public ResponseEntity<Void> createUser(@Valid @RequestBody UserCreateRequest request,
+                                           BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            throw new EmailDuplicateException(bindingResult);
+        }
 
         if(request == null) {
             throw new IllegalArgumentException(); // <<<< 커스텀 예외처리 하기
