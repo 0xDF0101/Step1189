@@ -39,7 +39,7 @@ public class UserService {
                 .password(encodedPassword)
                 .email(dto.email())
                 .role(Role.USER)
-                .socialType("Local")
+                .socialType("local")
                 .build();
 
         log.debug("회원가입할 user 정보 : {}", user);

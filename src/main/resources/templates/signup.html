@@ -63,7 +63,8 @@
 
         <div class="form-group">
             <label>사용자 이름</label>
-            <input type="text" name="username" id="name" placeholder="이름을 입력하세요" required>
+            <div id="usernameError" style="color: var(--error-red); font-size: 0.75rem; margin-bottom: 5px;"></div>
+            <input type="text" name="username" id="username" placeholder="영어, 숫자, _, - 만 가능해요" required>
         </div>
 
         <div class="form-group">
@@ -91,6 +92,26 @@
     const confirm = document.getElementById('passwordConfirm');
     const msg = document.getElementById('passwordMsg');
     const btn = document.getElementById('submitBtn');
+    const username = document.getElementById('username');
+
+    username.addEventListener('input', (e) => {
+        const regex = /^[a-zA-Z0-9_-]*$/;
+        const value = e.target.value;
+        const errorElement = document.getElementById("usernameError"); // 상자 가져오기
+
+        // 💡 .text -> .test 로 수정!
+        if (!regex.test(value)) {
+            // 허용되지 않은 문자 제거
+            e.target.value = value.replace(/[^a-zA-Z0-9_-]/g, '');
+            if (errorElement) {
+                errorElement.innerText = "영어, 숫자, 언더바(_), 하이픈(-) 만 가능합니다. 🌿";
+            }
+        } else {
+            if (errorElement) {
+                errorElement.innerText = ""; // 조건 맞으면 에러 지우기
+            }
+        }
+    });
 
     function validate() {
         if (confirm.value === "") {
