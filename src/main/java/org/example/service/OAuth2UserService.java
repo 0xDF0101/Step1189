@@ -38,7 +38,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String email = (String) attributes.get("email");
         // 💡 1. 제공자 정보 가져오기 (google)
         String provider = userRequest.getClientRegistration().getRegistrationId();
-
         // 💡 2. 제공자 고유 ID 가져오기 (구글은 "sub"이라는 키를 사용해)
         String providerId = (String) attributes.get("sub");
 
@@ -57,7 +56,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .providerId(providerId)
                             .role(Role.PRE_USER)
                             .build();
-
                 });
         /**
          * 실제 Entity에서는 provider가 아닌 SocialType으로 저장됨

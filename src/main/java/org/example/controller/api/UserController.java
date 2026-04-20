@@ -28,29 +28,21 @@ public class UserController {
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(validator);
     }
+    // --> 검증
 
+    /**
+     * 사실 쓰지는 않음 (언젠간 쓰지 않을까? 내부적으로라도?)
+     */
     @ResponseBody
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserInfo> getUser(@PathVariable Long userId) { // <<< 파라미터 검증 필요
-
         UserInfo userinfo = userService.getUser(userId);
-
         return ResponseEntity.ok().body(userinfo);
     }
 
-//    @PostMapping("/users")
-//    public ResponseEntity<Void> createUser(UserCreateRequest request) {
-//
-//        if(request == null) {
-//            throw new IllegalArgumentException(); // <<<< 커스텀 예외처리 하기
-//        }
-
-//        userService.createUser(request);
-//
-//        log.info("회원 등록 완료 : ", request.nickname());
-//        return ResponseEntity.ok().build();
-//    }
-
+    /**
+     * 로컬 회원가입 요청 로직 (OAuth X)
+     */
     @ResponseBody
     @PostMapping("/api/v1/users")
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserCreateRequest request,
@@ -59,13 +51,9 @@ public class UserController {
             throw new EmailDuplicateException(bindingResult);
         }
 
-        if(request == null) {
-            throw new IllegalArgumentException(); // <<<< 커스텀 예외처리 하기
-        }
-
         userService.signUp(request);
 
-        log.info("회원 등록 완료 : ", request.username());
+        log.info("회원 등록 완료 : {}", request.username());
         return ResponseEntity.ok().build();
     }
 

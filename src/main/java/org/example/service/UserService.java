@@ -13,6 +13,8 @@ import org.example.dto.user.UserInfo;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,20 +27,6 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다."));
         return new UserInfo(user);
     }
-
-    // 임시 로직 ---> 추후에 없애도 됨
-    public void createUser(UserCreateRequest request) {
-        User user = new User(request);
-        userRepository.save(user);
-        log.info("저장 완료 : {}", user.getUsername());
-    }
-
-    /**
-     *         String username,
-     *         String password,
-     *         String email,
-     *         String statusMessage
-     */
 
     // Local 회원 가입 로직
     @Transactional
@@ -54,10 +42,9 @@ public class UserService {
                 .socialType("Local")
                 .build();
 
+        log.debug("회원가입할 user 정보 : {}", user);
 
-
-        userRepository.saveAndFlush(user);
-
+        userRepository.save(user);
 
         log.info("user 저장 완료");
     }

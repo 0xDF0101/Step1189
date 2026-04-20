@@ -76,14 +76,4 @@ public class User {
         this.username = username;
         this.role = role;
     }
-
-    public User(UserCreateRequest request) {
-        this.email = request.email();
-//        this.name = request.name();
-        this.username = request.username();
-        this.socialType = "Google";
-        this.providerId = "000000";
-        this.role = Role.USER;
-    }
-
 }
