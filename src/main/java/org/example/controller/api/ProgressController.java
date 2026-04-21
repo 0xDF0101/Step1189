@@ -24,6 +24,7 @@ public class ProgressController {
             @AuthenticationPrincipal CustomUserDetails customUser
     ) {
         Long userId = customUser.getUserId();
+        // <권, <장, 읽은 횟수>>
         Map<Integer, Map<Integer, Integer>> allProgress = progressService.getAllProgress(userId);
 
         return ResponseEntity.ok().body(allProgress);
