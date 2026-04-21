@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.exception.EmailDuplicateException;
 import org.example.service.CustomUserDetailService;
 import org.example.service.UserService;
-import org.example.validator.UserEmailDuplicateValidator;
+import org.example.utility.validator.UserEmailDuplicateValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

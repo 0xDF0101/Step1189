@@ -1,4 +1,4 @@
-package org.example.validator;
+package org.example.utility.validator;
 
 
 import lombok.RequiredArgsConstructor;

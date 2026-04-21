@@ -1,15 +1,18 @@
 package org.example.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.config.WebConfig;
 import org.example.dto.progress.RecordRequest;
 import org.example.dto.user.CustomUserDetails;
 import org.example.service.ProgressService;
+import org.example.utility.resolver.LoginUserArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(ProgressController.class)
+@Import({WebConfig.class, LoginUserArgumentResolver.class})
 class ProgressControllerTest {
     @Autowired
     private ObjectMapper objectMapper;

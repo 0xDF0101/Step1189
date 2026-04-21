@@ -7,7 +7,7 @@ import org.example.exception.EmailDuplicateException;
 import org.example.service.UserService;
 import org.example.dto.user.UserCreateRequest;
 import org.example.dto.user.UserInfo;
-import org.example.validator.UserEmailDuplicateValidator;
+import org.example.utility.validator.UserEmailDuplicateValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -71,10 +71,4 @@ public class UserController {
 
         return "redirect:/main";
     }
-
-
-
-
-
-
 }
