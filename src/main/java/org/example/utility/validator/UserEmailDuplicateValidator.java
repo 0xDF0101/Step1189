@@ -10,9 +10,11 @@ import org.springframework.validation.Validator;
 
 /**
  * 회원가입 시, 중복 이메일이 있는지 검증하는 validator
+ *
+ * ** 이제 필요가 없지만 아까우니까 남겨두겠음 **
  */
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class UserEmailDuplicateValidator implements Validator {
 

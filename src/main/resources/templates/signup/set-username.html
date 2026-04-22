@@ -111,7 +111,7 @@
 <div class="mobile-container">
     <h1>사용할 이름을 입력해주세요</h1>
 
-    <form action="/api/v1/users/username" method="post">
+    <form th:action="@{/api/v1/users/username}" method="post" id="signupForm">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="username" required autocomplete="off">
@@ -121,6 +121,31 @@
         <button type="submit" class="btn-continue">Continue</button>
     </form>
 </div>
+
+<script>
+    document.getElementById('signupForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // 이게 여기 붙는게 맞나?
+
+        const username = document.getElementById('username').value;
+        const params = new URLSearchParams();
+        params.append('username', username);
+
+        fetch('/api/v1/users/username', {
+            method: 'POST',
+            // headers: {'Content-type': 'application/x-www-form-urlencoded'}
+            // ---> 이건 디폴트라 굳이 설정 안해도 됨
+            body: params
+        }).then(response => {
+            if(response.ok) {
+                window.location.href = "/main";
+            } else {
+                alert("문제가 발생했습니다.");
+            }
+        }).catch(error => {
+            console.error("Error : ", error);
+        })
+    })
+</script>
 
 </body>
 </html>

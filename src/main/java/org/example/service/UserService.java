@@ -3,6 +3,7 @@ package org.example.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.exception.EmailDuplicateException;
 import org.example.exception.EmailNotFoundException;
 import org.example.model.Role;
 import org.example.repository.UserRepository;
@@ -32,6 +33,11 @@ public class UserService {
     @Transactional
     public void signUp(UserCreateRequest dto) {
 
+        // 비즈니스 로직에 대한 검증은 여기서 해야한다!
+        if(userRepository.existsUserByEmail(dto.email())) {
+            throw new EmailDuplicateException("이미 사용 중인 이메일입니다.");
+        }
+
         String encodedPassword = passwordEncoder.encode(dto.password());
 
         User user = User.builder()
@@ -42,11 +48,8 @@ public class UserService {
                 .socialType("local")
                 .build();
 
-        log.debug("회원가입할 user 정보 : {}", user);
-
         userRepository.save(user);
-
-        log.info("user 저장 완료");
+        log.info("user 저장 완료 : {}", user.getId());
     }
 
     // OAuth로 회원가입 시, username 입력받고 업데이트 하기

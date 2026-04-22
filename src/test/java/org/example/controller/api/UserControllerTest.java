@@ -1,7 +1,9 @@
 package org.example.controller.api;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.dto.user.UserCreateRequest;
 import org.example.exception.EmailDuplicateException;
+import org.example.exception.advice.ApiExceptionAdvice;
 import org.example.service.CustomUserDetailService;
 import org.example.service.UserService;
 import org.example.utility.validator.UserEmailDuplicateValidator;
@@ -32,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //        SecurityAutoConfiguration.class,
 //        OAuth2ClientAutoConfiguration.class}
 //)
-@WebMvcTest(UserController.class)
+@WebMvcTest(controllers = {UserController.class, ApiExceptionAdvice.class})
 class UserControllerTest {
 
     @Autowired
@@ -40,8 +42,6 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
-    @MockBean
-    private UserEmailDuplicateValidator validator;
 
     @MockBean
     private CustomUserDetailService customUserDetailService;
@@ -62,11 +62,8 @@ class UserControllerTest {
     @DisplayName("회원가입시 signup()이 제대로 호출됨")
     @WithMockUser
     void signUp_success() throws Exception {
-        when(validator.supports(any())).thenReturn(true);
+//        when(validator.supports(any())).thenReturn(true);
         doNothing().when(userService).signUp(any());
-
-
-
 
         mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,14 +80,16 @@ class UserControllerTest {
     @DisplayName("이메일이 중복되었을 때, 예외 발생")
     @WithMockUser
     void duplicate_email_exception() throws Exception {
-        when(validator.supports(any())).thenReturn(true);
+//        when(validator.supports(any())).thenReturn(true);
+//
+//        doAnswer(invocation -> {
+//            Errors errors = invocation.getArgument(1);
+//            errors.rejectValue("email", "duplicate", "이미 존재하는 이메일입니다.");
+//            return null;
+//        }).when(validator).validate(any(), any());
 
-
-        doAnswer(invocation -> {
-            Errors errors = invocation.getArgument(1);
-            errors.rejectValue("email", "duplicate", "이미 존재하는 이메일입니다.");
-            return null;
-        }).when(validator).validate(any(), any());
+        doThrow(new EmailDuplicateException("이미 사용 중인 이메일입니다."))
+                .when(userService).signUp(any(UserCreateRequest.class));
 
         mockMvc.perform(post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)

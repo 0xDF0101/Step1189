@@ -16,24 +16,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
 
     private final UserService userService;
-    private final UserEmailDuplicateValidator validator;
-
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(validator);
-    }
-    // --> 검증
 
     /**
      * 사실 쓰지는 않음 (언젠간 쓰지 않을까? 내부적으로라도?)
      */
-    @ResponseBody
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserInfo> getUser(@PathVariable Long userId) { // <<< 파라미터 검증 필요
         UserInfo userinfo = userService.getUser(userId);
@@ -43,12 +35,11 @@ public class UserController {
     /**
      * 로컬 회원가입 요청 로직 (OAuth X)
      */
-    @ResponseBody
     @PostMapping("/api/v1/users")
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserCreateRequest request,
                                            BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-            throw new EmailDuplicateException(bindingResult);
+            // 여기서는 값에 대한 validation 만 처리한다.
         }
 
         userService.signUp(request);
@@ -59,7 +50,7 @@ public class UserController {
 
     // 얘는 그냥 Controller니까 클래스 분리해도 될 듯
     @PostMapping("/api/v1/users/username")
-    public String setUsername(@RequestParam("username") String username,
+    public ResponseEntity<Void> setUsername(@RequestParam("username") String username,
                                             @AuthenticationPrincipal OAuth2User oAuth2User) {
 
         log.debug("입력받은 아이디 : {}", username);
@@ -69,6 +60,6 @@ public class UserController {
 
         userService.updateUsername(email, username);
 
-        return "redirect:/main";
+        return ResponseEntity.ok().build();
     }
 }
