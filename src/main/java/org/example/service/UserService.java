@@ -53,7 +53,7 @@ public class UserService {
     @Transactional
     public void updateUsername(String email, String username) {
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException("해당 이메일이 없는데?"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException("해당 이메일이 없습니다."));
 
         user.updateUsernameAndRole(username, Role.USER);
         // ----> 더티 체킹

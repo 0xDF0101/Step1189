@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Step 1189 - 오류 발생</title>
+    <style>
+        /* 기본 리셋 및 폰트 설정 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 📱 모바일 팝업 형태의 컨테이너 */
+        .error-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            padding: 48px 32px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 */
+            text-align: center;
+            margin: 20px;
+        }
+
+        /* 아이콘 */
+        .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* 제목 및 설명 */
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #868e96;
+            margin-bottom: 28px;
+            line-height: 1.5;
+            word-break: keep-all;
+        }
+
+        /* 개발자용 에러 코드 박스 */
+        .error-box {
+            background-color: #fff5f5; /* 아주 연한 빨간색 배경 */
+            border: 1px solid #ffe3e3;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            text-align: left;
+            overflow-wrap: break-word;
+        }
+
+        .error-box span {
+            font-family: monospace;
+            font-size: 13px;
+            color: #e03131; /* 경고성 빨간색 텍스트 */
+            line-height: 1.4;
+        }
+
+        /* 버튼 스타일 */
+        .btn-home {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: #2ea44f; /* 시그니처 초록색 */
+            text-decoration: none;
+            border-radius: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-home:hover {
+            background-color: #269044;
+        }
+    </style>
+</head>
+<body>
+
+<div class="error-container">
+    <div class="icon">😥</div>
+    <h1>앗, 문제가 발생했어요!</h1>
+    <p class="subtitle">요청을 처리하는 중에 예상치 못한<br>오류가 발생했습니다.</p>
+
+    <div class="error-box">
+        <span th:text="${exception}">NullPointerException: 어쩌구 저쩌구...</span>
+    </div>
+
+    <a th:href="@{/login}" class="btn-home">로그인 화면으로 돌아가기</a>
+</div>
+
+</body>
+</html>
