@@ -1,6 +1,8 @@
 package org.example.controller.api;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.exception.EmailDuplicateException;
@@ -13,11 +15,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Validated // ---> 파라미터로 넘어오는 데이터를 검사하기 위함
 @Slf4j
 public class UserController {
 
@@ -36,11 +40,7 @@ public class UserController {
      * 로컬 회원가입 요청 로직 (OAuth X)
      */
     @PostMapping("/api/v1/users")
-    public ResponseEntity<Void> createUser(@Valid @RequestBody UserCreateRequest request,
-                                           BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            // 여기서는 값에 대한 validation 만 처리한다.
-        }
+    public ResponseEntity<Void> createUser(@Valid @RequestBody UserCreateRequest request) {
 
         userService.signUp(request);
 
@@ -48,9 +48,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    // 얘는 그냥 Controller니까 클래스 분리해도 될 듯
+    /**
+     * OAuth로 회원가입 시 username을 따로 입력받는 컨트롤러
+     */
     @PostMapping("/api/v1/users/username")
-    public ResponseEntity<Void> setUsername(@RequestParam("username") String username,
+    public ResponseEntity<Void> setUsername(@NotBlank @Size(min=4, max=20) @RequestParam("username") String username,
                                             @AuthenticationPrincipal OAuth2User oAuth2User) {
 
         log.debug("입력받은 아이디 : {}", username);

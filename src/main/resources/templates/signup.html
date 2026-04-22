@@ -42,6 +42,12 @@
             .signup-card { padding: 30px 20px; border-radius: 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
             body { padding: 0; background: white; }
         }
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -56,20 +62,21 @@
         <div class="form-group">
 
             <label>이메일</label>
-            <div id="emailError" style="color: red; font-size: 0.8em; margin-bottom: 5px;"></div>
             <input type="email" name="email" id="email" placeholder="example@email.com" required>
+            <div id="email-error" class="error-message"></div>
             <span class="msg" id="emailMsg"></span>
         </div>
 
         <div class="form-group">
             <label>사용자 이름</label>
-            <div id="usernameError" style="color: var(--error-red); font-size: 0.75rem; margin-bottom: 5px;"></div>
-            <input type="text" name="username" id="username" placeholder="영어, 숫자, _, - 만 가능해요" required>
+            <input type="text" name="username" id="username" placeholder="영어, 숫자, _, - 만 4자 이상 가능해요" required>
+            <div id="username-error" class="error-message"></div>
         </div>
 
         <div class="form-group">
             <label>비밀번호</label>
             <input type="password" name="password" id="password" placeholder="8자 이상 입력해주세요" required>
+            <div id="password-error" class="error-message"></div>
         </div>
 
         <div class="form-group">
@@ -146,22 +153,30 @@
         })
             .then(async response => {
                 // 먼저 에러 메시지창을 초기화 (이전 에러 지우기)
-                const errorElement = document.getElementById("emailError");
-                errorElement.innerText = "";
+                const errorElement1 = document.getElementById("email-error");
+                const errorElement2 = document.getElementById("username-error");
+                const errorElement3 = document.getElementById("password-error");
+                errorElement1.innerText = "";
+                errorElement2.innerText = "";
+                errorElement3.innerText = "";
 
                 if (response.ok) {
                     alert("가입 완료! 🌿");
                     window.location.href = "/login";
-                } else {
-                    // 서버에서 보낸 JSON 에러 메시지를 읽어옴
-                    const errorData = await response.json();
+                    return;
+                }
+                // 서버에서 보낸 JSON 에러 메시지를 읽어옴
+                const errorData = await response.json();
 
-                    // 이메일 중복 같은 특정 필드 에러라면?
-                    if (errorData.field === "email" || response.status === 409) {
-                        errorElement.innerText = errorData.message || "이미 존재하는 이메일입니다.";
-                    } else {
-                        alert("문제가 발생했습니다. 다시 시도해주세요.");
-                    }
+                if (response.status === 400 || response.status === 409) {
+                    errorData.forEach(error => {
+                        const errorElement = document.getElementById(`${error.field}-error`);
+                        if (errorElement) {
+                            errorElement.innerText = error.message;
+                        }
+                    });
+                } else {
+                    alert("서버 오류가 발생했습니다.");
                 }
             })
             .catch(error => console.error("Error:", error));
