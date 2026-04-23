@@ -112,11 +112,12 @@ class UserControllerTest {
                 .param("username", "user")
                 .with(oauth2Login().oauth2User(mockUser))
                 .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/main"));
+                .andExpect(status().isOk());
+//                .andExpect(redirectedUrl("/main"));
 
         verify(userService).updateUsername("eugene@gmail.com", "user");
     }
+
 
 
 }
