@@ -6,6 +6,7 @@ import org.example.dto.user.CustomUserDetails;
 import org.example.service.BibleService;
 import org.example.service.JpaProgressServiceImpl;
 import org.example.entity.Bible;
+import org.example.utility.annotation.LoginUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,15 +23,15 @@ public class BibleController {
     private final BibleService bibleService;
     private final JpaProgressServiceImpl jpaProgressServiceImpl;
 
+    /**
+     *  사실상 얘도 호출되는 애는 아님
+     */
     @ResponseBody
     @GetMapping("/bibles/{bibleId}")
     ResponseEntity<Bible> getBible(@PathVariable int bibleId) {
         if(bibleId < 1 || bibleId > 66) {
+            // TODO 예외처리 똑바로 하기
             throw new IllegalArgumentException();
-            /** TODO
-             * 커스텀 예외처리 하던가 이런 검증을
-             * service에서 해야할지, controller에서 해야할지 고민하기
-             */
         }
 
         Bible bible = bibleService.getBibleInfo(bibleId);
@@ -43,14 +44,14 @@ public class BibleController {
         return bibleService.getAllBibles();
     }
 
+    /**
+     * 일단은 이게 최선인 듯 ?
+     */
     @GetMapping("/bibles")
     public String getBibles(
-//            @RequestHeader(value = "X-USER-ID") Long userId,
-            @AuthenticationPrincipal CustomUserDetails customUser,
+            @LoginUser Long userId,
             Model model
             ) {
-
-        Long userId = customUser.getUserId();
 
         model.addAttribute("bibles", bibleService.getAllBibles());
         model.addAttribute("userProgress", jpaProgressServiceImpl.getAllProgress(userId));

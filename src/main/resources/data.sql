@@ -70,6 +70,7 @@ INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (66
 
 INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id) VALUES ('Eugene', 'eugene@gmail.com', 'ADMIN', true, '끼얏호', 'google', '132434');
 INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id) VALUES ('Suin', 'suin@gmail.com', 'USER', true, '야호', 'naver', '234231');
+INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id, password) VALUES ('path__finder', 'eugene2@gmail.com', 'USER', true, '야호', 'naver', '234231', '$2a$10$EdJwZCPQCLCIqyIZh9l0COSnndqiwnsW8N6F0XHi9bkgUESR2JWRu');
 
 -- 창세기 (1번 성경, 총 50장) : 앞부분 5장 정도 읽은 상태
 INSERT INTO progress (user_id, bible_id, is_completed, last_read_chapter, progress_data, created_at, updated_at)
