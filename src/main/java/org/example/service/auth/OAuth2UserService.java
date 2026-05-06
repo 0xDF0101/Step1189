@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.auth;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,13 +42,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String providerId = (String) attributes.get("sub");
 
         User user = userRepository.findByEmail(email)
-//                .map(entity -> {
-//                    entity.updateName(name); // 이름 업데이트 메서드가 있다면 활용
-//                    return entity;
-//                })
                 .orElseGet(() -> {
-                    // 신규 유저 생성 (생성자 파라미터 순서는 유진이 코드에 맞춰야 해!)
-//                    return new User(username, email, provider, providerId);
                     return User.builder()
                             .username(username)
                             .email(email)
@@ -63,10 +57,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
         userRepository.saveAndFlush(user); // 쓰기 지연이 일어나버리면 핸들러에서 캐치를 못함
 
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())),
-                attributes,
-                "email"
-        );
+        return new CustomUserDetails(user, oAuth2User.getAttributes());
     }
 }

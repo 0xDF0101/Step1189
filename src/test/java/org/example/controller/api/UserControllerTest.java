@@ -4,9 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.dto.user.UserCreateRequest;
 import org.example.exception.EmailDuplicateException;
 import org.example.exception.advice.ApiExceptionAdvice;
-import org.example.service.CustomUserDetailService;
+import org.example.service.auth.CustomUserDetailService;
 import org.example.service.UserService;
-import org.example.utility.validator.UserEmailDuplicateValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,14 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.Errors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 

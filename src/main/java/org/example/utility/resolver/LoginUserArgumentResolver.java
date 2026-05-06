@@ -1,6 +1,6 @@
 package org.example.utility.resolver;
 
-import org.example.dto.user.CustomUserDetails;
+import org.example.service.auth.CustomUserDetails;
 import org.example.utility.annotation.LoginUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;

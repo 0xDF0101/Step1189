@@ -2,14 +2,10 @@ package org.example.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.user.CustomUserDetails;
 import org.example.service.BibleService;
-import org.example.service.JpaProgressServiceImpl;
 import org.example.entity.Bible;
 import org.example.service.ProgressService;
 import org.example.utility.annotation.LoginUser;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -2,7 +2,7 @@ package org.example.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.controller.api.OAuth2SuccessHandler;
-import org.example.service.CustomUserDetailService;
+import org.example.service.auth.CustomUserDetailService;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

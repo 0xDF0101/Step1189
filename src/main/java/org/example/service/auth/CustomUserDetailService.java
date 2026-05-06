@@ -1,8 +1,7 @@
-package org.example.service;
+package org.example.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.user.CustomUserDetails;
 import org.example.entity.User;
 import org.example.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

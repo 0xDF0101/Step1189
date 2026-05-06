@@ -3,7 +3,7 @@ package org.example.controller.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.config.WebConfig;
 import org.example.dto.progress.RecordRequest;
-import org.example.dto.user.CustomUserDetails;
+import org.example.service.auth.CustomUserDetails;
 import org.example.service.ProgressService;
 import org.example.utility.resolver.LoginUserArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,16 +14,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.util.PathMatcher;
 
 import java.time.LocalDate;
-import java.util.Locale;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
