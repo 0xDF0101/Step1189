@@ -23,12 +23,25 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * 외부 OAuth2 제공자(Google 등)에 실제 HTTP 요청을 보내 사용자 정보를 가져옵니다.
+     *
+     * <p>단위 테스트에서 실제 네트워크 호출 없이 {@code super.loadUser()}를 스텁할 수 있도록
+     * protected 메서드로 분리했습니다. 프로덕션 코드에서는 직접 호출하지 마세요.</p>
+     *
+     * @param userRequest OAuth2 인증 요청 정보 (액세스 토큰, 클라이언트 등록 정보 포함)
+     * @return 외부 제공자로부터 받은 {@link OAuth2User} 정보
+     */
+    protected OAuth2User fetchFromProvider(OAuth2UserRequest userRequest) {
+        return super.loadUser(userRequest);
+    }
+
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         // 구글로부터 유저 정보를 가져옴
-        OAuth2User oAuth2User = super.loadUser(userRequest);
+        OAuth2User oAuth2User = fetchFromProvider(userRequest);
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
         String name = (String) attributes.get("name");
