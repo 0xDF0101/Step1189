@@ -21,6 +21,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     public CustomUserDetails(User user) {
         this.user = user;
+        this.attribute = Map.of(); // 어딘가에서 실수로라도 호출할 수 있으므로 비워놓기
     }
 
     public CustomUserDetails(User user, Map<String, Object> attribute) {
@@ -50,7 +51,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override

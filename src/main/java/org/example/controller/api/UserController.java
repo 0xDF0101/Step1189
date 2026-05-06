@@ -9,6 +9,7 @@ import org.example.exception.EmailDuplicateException;
 import org.example.service.UserService;
 import org.example.dto.user.UserCreateRequest;
 import org.example.dto.user.UserInfo;
+import org.example.utility.annotation.LoginUser;
 import org.example.utility.validator.UserEmailDuplicateValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -53,14 +54,11 @@ public class UserController {
      */
     @PostMapping("/api/v1/users/username")
     public ResponseEntity<Void> setUsername(@NotBlank @Size(min=4, max=20) @RequestParam("username") String username,
-                                            @AuthenticationPrincipal OAuth2User oAuth2User) {
+                                            @LoginUser Long userId) {
 
         log.debug("입력받은 아이디 : {}", username);
 
-        String email = oAuth2User.getAttribute("email");
-        // --> 사용자 식별용 이메일
-
-        userService.updateUsername(email, username);
+        userService.updateUsername(userId, username);
 
         return ResponseEntity.ok().build();
     }

@@ -146,9 +146,9 @@ class UserServiceTest {
                 .build();
 
         when(userRepository.existsUserByUsername("new-username")).thenReturn(false);
-        when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(storedUser));
+        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(storedUser));
 
-        userService.updateUsername(email, "new-username");
+        userService.updateUsername(1L, "new-username");
 
         assertEquals("new-username", storedUser.getUsername());
         // 더티 체킹은 확인 못하므로 그냥 비즈니스 로직만 검증
@@ -160,18 +160,19 @@ class UserServiceTest {
         when(userRepository.existsUserByUsername(username)).thenReturn(true);
 
         assertThrows(UsernameDuplicateException.class, () -> {
-            userService.updateUsername(email, username);
+            userService.updateUsername(1L, username);
         });
     }
 
     @Test
-    @DisplayName("email을 찾지 못했을 때 예외")
+    @DisplayName("해당 유저를 찾지 못했을 때 예외")
     void not_found_email() {
         when(userRepository.existsUserByUsername(username)).thenReturn(false);
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+//        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(userRepository.findById(any())).thenReturn(Optional.empty());
 
-        assertThrows(EmailNotFoundException.class, () -> {
-            userService.updateUsername(email, username);
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.updateUsername(1L, username);
         });
     }
 

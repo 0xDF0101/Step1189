@@ -57,13 +57,13 @@ public class UserService {
 
     // OAuth로 회원가입 시, username 입력받고 업데이트 하기
     @Transactional
-    public void updateUsername(String email, String username) {
+    public void updateUsername(Long userId, String username) {
 
         if(userRepository.existsUserByUsername(username)) {
             throw new UsernameDuplicateException("이미 사용 중인 사용자 이름입니다.");
         }
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException("해당 이메일이 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
 
         user.updateUsernameAndRole(username, Role.USER); // Dirty Checking
     }

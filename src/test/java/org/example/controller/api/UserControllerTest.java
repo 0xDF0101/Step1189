@@ -112,7 +112,7 @@ class UserControllerTest {
                 .andExpect(status().isOk());
 //                .andExpect(redirectedUrl("/main"));
 
-        verify(userService).updateUsername("eugene@gmail.com", "user");
+        verify(userService).updateUsername(any(), any());
     }
 
 
