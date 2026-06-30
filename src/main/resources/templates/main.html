@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Step 1189 | Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --color-level-0: #ebedf0;
@@ -142,9 +143,63 @@
         .legend-box { width: 10px; height: 10px; border-radius: 2px; }
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(3, 1fr) repeat(2, minmax(120px, 160px));
             gap: 15px;
             margin-top: 20px;
+            align-items: stretch;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .stat-card { grid-column: span 1; }
+        }
+
+        .chart-card {
+            background: white;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 16px 12px 12px;
+            text-align: center;
+        }
+
+        .chart-title {
+            font-size: 0.78rem;
+            color: #57606a;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto;
+        }
+
+        .chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .chart-pct {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #24292f;
+            line-height: 1;
+        }
+
+        .chart-sub {
+            font-size: 0.75rem;
+            color: #57606a;
+            margin-top: 8px;
         }
 
         .stat-card {
@@ -152,39 +207,31 @@
             border: 1px solid #d0d7de;
             border-radius: 6px;
             padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #57606a;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .stat-value {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            color: #24292f;
-            margin-bottom: 10px;
+            color: var(--primary-green);
         }
 
-        .stat-value span { color: var(--primary-green); }
-
-        .progress-bar {
-            height: 6px;
-            background: #ebedf0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary-green);
-            border-radius: 3px;
-            transition: width 0.6s ease;
-            width: 0%;
+        .stat-value-unit {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #57606a;
+            margin-left: 2px;
         }
 
         /* --- 메인 대시보드 모바일 최적화 --- */
@@ -269,28 +316,37 @@
     </div>
 
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">총 진도</div>
-            <div class="stat-value"><span id="totalRead">-</span> / 1,189장</div>
-            <div class="progress-bar"><div id="totalBar" class="progress-fill"></div></div>
+        <div class="chart-card">
+            <div class="chart-title">총 진도</div>
+            <div class="chart-wrapper">
+                <canvas id="totalChart"></canvas>
+                <div class="chart-center"><div class="chart-pct" id="totalPct">-</div></div>
+            </div>
+            <div class="chart-sub" id="totalSub">- / 1,189장</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-label">구약</div>
-            <div class="stat-value"><span id="otRead">-</span> / <span id="otTotal" style="color:#24292f">-</span>장</div>
-            <div class="progress-bar"><div id="otBar" class="progress-fill"></div></div>
+        <div class="chart-card">
+            <div class="chart-title">구약</div>
+            <div class="chart-wrapper">
+                <canvas id="otChart"></canvas>
+                <div class="chart-center"><div class="chart-pct" id="otPct">-</div></div>
+            </div>
+            <div class="chart-sub" id="otSub">-</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-label">신약</div>
-            <div class="stat-value"><span id="ntRead">-</span> / <span id="ntTotal" style="color:#24292f">-</span>장</div>
-            <div class="progress-bar"><div id="ntBar" class="progress-fill"></div></div>
+        <div class="chart-card">
+            <div class="chart-title">신약</div>
+            <div class="chart-wrapper">
+                <canvas id="ntChart"></canvas>
+                <div class="chart-center"><div class="chart-pct" id="ntPct">-</div></div>
+            </div>
+            <div class="chart-sub" id="ntSub">-</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">오늘 읽은 장</div>
-            <div class="stat-value"><span id="todayCount">-</span>장</div>
+            <div class="stat-value" id="todayCount">-<span class="stat-value-unit">장</span></div>
         </div>
         <div class="stat-card">
             <div class="stat-label">연속 읽기</div>
-            <div class="stat-value"><span id="streak">-</span>일</div>
+            <div class="stat-value" id="streak">-<span class="stat-value-unit">일</span></div>
         </div>
     </div>
 
@@ -332,17 +388,41 @@
     }
 
     function renderStats(s) {
-        document.getElementById('totalRead').textContent = s.totalRead;
-        document.getElementById('otRead').textContent = s.oldTestamentRead;
-        document.getElementById('otTotal').textContent = s.oldTestamentTotal;
-        document.getElementById('ntRead').textContent = s.newTestamentRead;
-        document.getElementById('ntTotal').textContent = s.newTestamentTotal;
-        document.getElementById('todayCount').textContent = s.todayCount;
-        document.getElementById('streak').textContent = s.streak;
+        const pct = (r, t) => t > 0 ? (r / t * 100).toFixed(1) + '%' : '0%';
 
-        document.getElementById('totalBar').style.width = (s.totalRead / s.totalChapters * 100).toFixed(1) + '%';
-        document.getElementById('otBar').style.width = (s.oldTestamentRead / s.oldTestamentTotal * 100).toFixed(1) + '%';
-        document.getElementById('ntBar').style.width = (s.newTestamentRead / s.newTestamentTotal * 100).toFixed(1) + '%';
+        makeDoughnut('totalChart', s.totalRead, s.totalChapters);
+        document.getElementById('totalPct').textContent = pct(s.totalRead, s.totalChapters);
+        document.getElementById('totalSub').textContent = `${s.totalRead.toLocaleString()} / ${s.totalChapters.toLocaleString()}장`;
+
+        makeDoughnut('otChart', s.oldTestamentRead, s.oldTestamentTotal);
+        document.getElementById('otPct').textContent = pct(s.oldTestamentRead, s.oldTestamentTotal);
+        document.getElementById('otSub').textContent = `${s.oldTestamentRead} / ${s.oldTestamentTotal}장`;
+
+        makeDoughnut('ntChart', s.newTestamentRead, s.newTestamentTotal);
+        document.getElementById('ntPct').textContent = pct(s.newTestamentRead, s.newTestamentTotal);
+        document.getElementById('ntSub').textContent = `${s.newTestamentRead} / ${s.newTestamentTotal}장`;
+
+        document.getElementById('todayCount').innerHTML = `${s.todayCount}<span class="stat-value-unit">장</span>`;
+        document.getElementById('streak').innerHTML = `${s.streak}<span class="stat-value-unit">일</span>`;
+    }
+
+    function makeDoughnut(canvasId, read, total) {
+        new Chart(document.getElementById(canvasId), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [read, total - read],
+                    backgroundColor: ['#2ea44f', '#ebedf0'],
+                    borderWidth: 0,
+                    hoverOffset: 0,
+                }]
+            },
+            options: {
+                cutout: '72%',
+                animation: { duration: 800 },
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            }
+        });
     }
 
     function renderGrass(data) {
