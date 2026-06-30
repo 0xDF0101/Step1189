@@ -38,6 +38,12 @@ public class JpaPlanServiceImpl implements PlanService {
     }
 
     @Override
+    @Transactional
+    public void deletePlan(Long userId) {
+        planRepository.findByUserId(userId).ifPresent(planRepository::delete);
+    }
+
+    @Override
     public Optional<PlanStatsResponse> getStats(Long userId) {
         return planRepository.findByUserId(userId).map(plan -> buildStats(userId, plan));
     }

@@ -6,93 +6,164 @@
     <title>Step 1189 | 읽기 계획</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
     <style>
-        :root { --green: #2ea44f; --red: #cf222e; --gray: #57606a; --border: #d0d7de; --bg: #f8f9fa; }
+        :root {
+            --green: #2ea44f;
+            --green-light: #e8f5ec;
+            --red: #e53e3e;
+            --red-light: #fff5f5;
+            --text: #1a1a2e;
+            --text-secondary: #8e8e93;
+            --bg: #f4f5f8;
+            --card: #ffffff;
+            --radius: 16px;
+            --shadow: 0 2px 12px rgba(0,0,0,0.06);
+            --shadow-sm: 0 1px 4px rgba(0,0,0,0.04);
+        }
 
-        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: #24292f; margin: 0; padding: 0 0 80px; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0 0 calc(70px + env(safe-area-inset-bottom)); -webkit-font-smoothing: antialiased; }
 
-        .navbar { background: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 0 rgba(27,31,35,0.06); }
-        .logo { font-size: 1.3rem; font-weight: 800; color: var(--green); text-decoration: none; }
+        /* ── 헤더 ── */
+        .top-bar { background: var(--card); padding: 16px 20px; display: flex; align-items: center; box-shadow: var(--shadow-sm); }
+        .top-bar-title { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+        .logo-dot { color: var(--green); }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 30px 20px; }
+        /* ── 컨테이너 ── */
+        .container { max-width: 600px; margin: 0 auto; padding: 20px 16px; }
 
-        /* ── 계획 없음 ── */
-        .setup-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 30px; }
-        .setup-title { font-size: 1.3rem; font-weight: 800; margin: 0 0 6px; }
-        .setup-desc { color: var(--gray); font-size: 0.9rem; margin: 0 0 24px; }
+        /* ── 섹션 제목 ── */
+        .section-title { font-size: 1.4rem; font-weight: 800; color: var(--text); margin: 0 0 4px; }
+        .section-desc { font-size: 0.9rem; color: var(--text-secondary); margin: 0 0 20px; }
 
-        .form-group { margin-bottom: 16px; }
-        .form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; }
-        .form-input { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; font-family: inherit; box-sizing: border-box; }
-        .form-input:focus { outline: none; border-color: var(--green); }
+        /* ── 카드 ── */
+        .card { background: var(--card); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 12px; }
 
-        .preview-box { background: #f0faf3; border: 1px solid #9be9a8; border-radius: 8px; padding: 14px 16px; margin: 20px 0; display: none; }
-        .preview-label { font-size: 0.8rem; color: var(--gray); margin-bottom: 4px; }
-        .preview-value { font-size: 1.5rem; font-weight: 800; color: var(--green); }
-        .preview-sub { font-size: 0.8rem; color: var(--gray); margin-top: 2px; }
+        /* ── 폼 ── */
+        .form-group { margin-bottom: 14px; }
+        .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.02em; }
+        .form-input {
+            width: 100%; padding: 13px 14px;
+            border: 1.5px solid #e5e5ea;
+            border-radius: 12px;
+            font-size: 0.95rem; font-family: inherit;
+            background: var(--bg); color: var(--text);
+            transition: border-color 0.15s;
+        }
+        .form-input:focus { outline: none; border-color: var(--green); background: #fff; }
 
-        .btn-primary { display: block; width: 100%; padding: 14px; background: var(--green); color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+        /* ── 미리보기 박스 ── */
+        .preview-box {
+            background: var(--green-light); border-radius: 12px;
+            padding: 16px; margin: 16px 0; display: none;
+        }
+        .preview-label { font-size: 0.78rem; font-weight: 600; color: var(--green); margin-bottom: 4px; letter-spacing: 0.03em; }
+        .preview-value { font-size: 2rem; font-weight: 800; color: var(--green); line-height: 1; }
+        .preview-sub { font-size: 0.82rem; color: #3a7d52; margin-top: 4px; }
+
+        /* ── 버튼 ── */
+        .btn-primary {
+            display: block; width: 100%; padding: 15px;
+            background: var(--green); color: white; border: none;
+            border-radius: 14px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; font-family: inherit;
+            transition: filter 0.15s, transform 0.1s;
+        }
         .btn-primary:hover { filter: brightness(0.92); }
-        .btn-primary:disabled { background: #adb5bd; cursor: not-allowed; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled { background: #c7c7cc; cursor: not-allowed; }
 
-        /* ── 계획 있음 ── */
-        .plan-header { margin-bottom: 20px; }
-        .plan-period { font-size: 0.85rem; color: var(--gray); font-weight: 600; margin-bottom: 4px; }
-        .plan-headline { font-size: 1.6rem; font-weight: 800; }
+        .btn-secondary {
+            display: block; width: 100%; padding: 13px;
+            background: var(--bg); color: var(--text-secondary); border: none;
+            border-radius: 14px; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; font-family: inherit; margin-top: 8px;
+            transition: background 0.15s, color 0.15s;
+        }
+        .btn-secondary:hover { background: #e9e9ef; color: var(--text); }
+
+        .btn-danger {
+            display: block; width: 100%; padding: 13px;
+            background: var(--red-light); color: var(--red); border: none;
+            border-radius: 14px; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; font-family: inherit; margin-top: 8px;
+            transition: filter 0.15s;
+        }
+        .btn-danger:hover { filter: brightness(0.95); }
+
+        /* ── 계획 헤더 ── */
+        .plan-period-label { font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+        .plan-headline { font-size: 1.5rem; font-weight: 800; margin-bottom: 16px; }
         .plan-headline span { color: var(--green); }
 
-        .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
-        .stat-box { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
-        .stat-box-label { font-size: 0.72rem; color: var(--gray); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
-        .stat-box-value { font-size: 1.3rem; font-weight: 800; color: #24292f; }
-        .stat-box-unit { font-size: 0.8rem; color: var(--gray); font-weight: 500; }
+        /* ── 진도 바 ── */
+        .progress-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+        .progress-title { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+        .progress-count { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+        .progress-bar { height: 8px; background: #e5e5ea; border-radius: 99px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.9s cubic-bezier(0.4,0,0.2,1); width: 0%; }
 
-        .progress-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 14px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; }
-        .progress-bar { height: 10px; background: #ebedf0; border-radius: 5px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--green); border-radius: 5px; transition: width 0.8s ease; width: 0%; }
+        /* ── 통계 박스 ── */
+        .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+        .stat-box { background: var(--card); border-radius: var(--radius); padding: 14px 10px; box-shadow: var(--shadow); text-align: center; }
+        .stat-box-label { font-size: 0.7rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.03em; }
+        .stat-box-value { font-size: 1.3rem; font-weight: 800; color: var(--text); line-height: 1; }
+        .stat-box-unit { font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); margin-left: 1px; }
 
-        .pace-card { border-radius: 10px; padding: 16px 20px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
-        .pace-card.on-track { background: #f0faf3; border: 1px solid #9be9a8; }
-        .pace-card.behind { background: #fff5f5; border: 1px solid #ffb8b8; }
-        .pace-label { font-size: 0.85rem; font-weight: 700; }
+        /* ── 페이스 카드 ── */
+        .pace-card {
+            border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow);
+        }
+        .pace-card.on-track { background: var(--green-light); }
+        .pace-card.behind { background: var(--red-light); }
+        .pace-label { font-size: 0.9rem; font-weight: 700; }
         .pace-label.on-track { color: var(--green); }
         .pace-label.behind { color: var(--red); }
-        .pace-detail { font-size: 0.8rem; color: var(--gray); margin-top: 3px; }
+        .pace-detail { font-size: 0.8rem; color: var(--text-secondary); margin-top: 3px; }
         .pace-adj { text-align: right; }
-        .pace-adj-label { font-size: 0.72rem; color: var(--gray); }
-        .pace-adj-value { font-size: 1.2rem; font-weight: 800; }
+        .pace-adj-label { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 2px; }
+        .pace-adj-value { font-size: 1.3rem; font-weight: 800; }
         .pace-adj-value.on-track { color: var(--green); }
         .pace-adj-value.behind { color: var(--red); }
 
-        .btn-secondary { display: block; width: 100%; padding: 12px; background: white; color: var(--gray); border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 10px; }
-        .btn-secondary:hover { border-color: var(--green); color: var(--green); }
-
         /* ── 하단 네비 ── */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); display: flex; z-index: 200; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; text-decoration: none; color: var(--gray); font-size: 0.72rem; font-weight: 600; gap: 3px; transition: color 0.15s; }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--card);
+            box-shadow: 0 -1px 0 rgba(0,0,0,0.06), 0 -4px 16px rgba(0,0,0,0.05);
+            display: flex; z-index: 200;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .nav-item {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 10px 0; text-decoration: none;
+            color: var(--text-secondary); font-size: 0.7rem; font-weight: 600;
+            gap: 3px; transition: color 0.15s;
+        }
         .nav-item.active { color: var(--green); }
         .nav-item svg { width: 22px; height: 22px; }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <a href="/main" class="logo">Step 1189 🌿</a>
-</nav>
+<header class="top-bar">
+    <span class="top-bar-title">Step 1189 <span class="logo-dot">·</span> 읽기 계획</span>
+</header>
 
 <div class="container">
 
     <!-- 계획 없음: 설정 폼 -->
     <div id="setupView" style="display:none;">
-        <div class="setup-card">
-            <div class="setup-title">읽기 계획 세우기</div>
-            <div class="setup-desc">기간을 설정하면 하루에 읽어야 할 분량과 페이스를 알려드려요.</div>
+        <div class="section-title">읽기 계획 세우기</div>
+        <div class="section-desc">기간을 설정하면 하루 목표와 페이스를 알려드려요.</div>
 
+        <div class="card">
             <div class="form-group">
                 <label class="form-label">시작일</label>
                 <input type="date" id="startDate" class="form-input">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:0;">
                 <label class="form-label">종료일</label>
                 <input type="date" id="endDate" class="form-input">
             </div>
@@ -109,15 +180,13 @@
 
     <!-- 계획 있음: 통계 -->
     <div id="statsView" style="display:none;">
-        <div class="plan-header">
-            <div class="plan-period" id="planPeriod"></div>
-            <div class="plan-headline">하루 <span id="targetPerDay">-</span>장씩 읽는 계획</div>
-        </div>
+        <div class="plan-period-label" id="planPeriod"></div>
+        <div class="plan-headline">하루 <span id="targetPerDay">-</span>장씩 읽는 계획</div>
 
-        <div class="progress-card">
-            <div class="progress-label">
-                <span>전체 진도</span>
-                <span><span id="chaptersRead">-</span> / 1,189장 (<span id="pctDisplay">-</span>)</span>
+        <div class="card">
+            <div class="progress-header">
+                <span class="progress-title">전체 진도</span>
+                <span class="progress-count"><span id="chaptersRead">-</span> / 1,189장 &nbsp;<span id="pctDisplay" style="color:var(--green);">-</span></span>
             </div>
             <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
         </div>
@@ -149,6 +218,7 @@
         </div>
 
         <button class="btn-secondary" onclick="showSetup()">계획 변경</button>
+        <button class="btn-danger" onclick="deletePlan()">계획 삭제</button>
     </div>
 
 </div>
@@ -255,6 +325,21 @@
             adjTarget.className = 'pace-adj-value behind';
         }
         adjTarget.textContent = `${s.adjustedDailyTarget}장/일`;
+    }
+
+    function deletePlan() {
+        if (!confirm('계획을 삭제할까요?')) return;
+        fetch('/api/v1/plan', { method: 'DELETE' }).then(res => {
+            if (res.ok) {
+                document.getElementById('statsView').style.display = 'none';
+                startInput.value = new Date().toISOString().split('T')[0];
+                endInput.value = '';
+                document.getElementById('previewBox').style.display = 'none';
+                savePlanBtn.disabled = true;
+                savePlanBtn.textContent = '계획 시작';
+                document.getElementById('setupView').style.display = 'block';
+            }
+        });
     }
 
     async function loadPlan() {

@@ -30,4 +30,10 @@ public class PlanController {
         planService.savePlan(userId, request);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/plan")
+    public ResponseEntity<Void> deletePlan(@LoginUser Long userId) {
+        planService.deletePlan(userId);
+        return ResponseEntity.ok().build();
+    }
 }

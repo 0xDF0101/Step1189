@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     private final User user; // DB entity
     private Map<String, Object> attribute; // OAuth2 용
 
-    public CustomUserDetails(User user) {
+    public  CustomUserDetails(User user) {
         this.user = user;
         this.attribute = Map.of(); // 어딘가에서 실수로라도 호출할 수 있으므로 비워놓기
     }

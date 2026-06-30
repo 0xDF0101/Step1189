@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface PlanService {
     void savePlan(Long userId, PlanRequest request);
+    void deletePlan(Long userId);
     Optional<PlanStatsResponse> getStats(Long userId);
 }

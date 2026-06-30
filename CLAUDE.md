@@ -36,7 +36,7 @@ docker-compose up --build
 | `dev` | MySQL via env vars | `never` |
 | default | MySQL via env vars | `never` |
 
-Local profile env vars not needed. Dev/prod requires `DB_URL`, `DB_USERNANE` (typo in yml), `DB_PASSWORD`, `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`.
+Local profile env vars not needed. Dev/prod requires `DB_URL`, `DB_USERNAME` (typo in yml), `DB_PASSWORD`, `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`.
 
 ## Architecture
 
