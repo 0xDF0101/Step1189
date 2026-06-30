@@ -2,6 +2,7 @@ package org.example.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import org.example.service.ProgressService;
+import org.example.dto.progress.BatchRecordRequest;
 import org.example.dto.progress.RecordRequest;
 import org.example.utility.annotation.LoginUser;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,17 @@ public class ProgressController {
             @LoginUser Long userId,
             @RequestBody RecordRequest request
     ) {
-
         progressService.recordProgress(userId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    // 여러 장을 한번에 '읽음' 표시
+    @PostMapping("/progress/batch")
+    public ResponseEntity<Void> recordBatchProgress(
+            @LoginUser Long userId,
+            @RequestBody BatchRecordRequest request
+    ) {
+        progressService.recordBatchProgress(userId, request);
         return ResponseEntity.ok().build();
     }
 

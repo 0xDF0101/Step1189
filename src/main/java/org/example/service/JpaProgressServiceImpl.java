@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.repository.BibleRepository;
 import org.example.repository.DailyProgressRepository;
 import org.example.repository.ProgressRepository;
+import org.example.dto.progress.BatchRecordRequest;
 import org.example.dto.progress.DailyProgressDto;
 import org.example.dto.progress.RecordRequest;
 import org.example.repository.UserRepository;
@@ -95,6 +96,46 @@ public class JpaProgressServiceImpl implements ProgressService {
                             dailyProgressRepository.save(new DailyProgress(user, today, 1));
                         }
 
+                );
+    }
+
+    @Transactional
+    public void recordBatchProgress(Long userId, BatchRecordRequest request) {
+        if (request.chapterNumbers() == null || request.chapterNumbers().isEmpty()) return;
+
+        Bible bible = bibleRepository.findById(request.bibleId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 성경이 존재하지 않습니다."));
+
+        Progress progress = progressRepository.findByUserIdAndBibleId(userId, request.bibleId())
+                .orElseGet(() -> {
+                    User user = userRepository.getReferenceById(userId);
+                    return progressRepository.save(new Progress(user, bible));
+                });
+
+        Map<Integer, Integer> convertedProgress = convertBitmapToReadMap(progress.getProgressData());
+
+        int lastChapter = -1;
+        for (int chapter : request.chapterNumbers()) {
+            convertedProgress.merge(chapter, 1, Integer::sum);
+            lastChapter = chapter;
+        }
+
+        if (lastChapter != -1) {
+            progress.updateLastReadChapter(lastChapter);
+        }
+
+        progress.updateProgressData(convertReadMapToBitmap(convertedProgress, bible.getTotalChapter()));
+
+        // ----- Daily Progress Update -----
+        LocalDate today = LocalDate.now();
+        int count = request.chapterNumbers().size();
+        dailyProgressRepository.findByUserIdAndReadDate(userId, today)
+                .ifPresentOrElse(
+                        dp -> dp.increaseCountBy(count),
+                        () -> {
+                            User user = userRepository.getReferenceById(userId);
+                            dailyProgressRepository.save(new DailyProgress(user, today, count));
+                        }
                 );
     }
 

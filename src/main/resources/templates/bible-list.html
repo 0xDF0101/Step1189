@@ -31,6 +31,10 @@
         .modal-title { font-size: 1.5rem; font-weight: 800; color: #2ea44f; }
         .chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 10px; }
         .chapter-btn { border: 1px solid #e9ecef; padding: 12px 0; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: 0.2s; }
+        .chapter-btn.selected { outline: 3px solid #2ea44f; outline-offset: 2px; }
+        .confirm-btn { display: block; width: 100%; margin-top: 20px; padding: 14px; background: #2ea44f; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .confirm-btn:hover { background: #238a3e; }
+        .confirm-btn:disabled { background: #adb5bd; cursor: not-allowed; }
         .active-modal { display: flex !important; }
 
         /* 1. 기본 컨테이너 여백 조정 */
@@ -129,6 +133,7 @@
             <button style="background:none; border:none; font-size:1.5rem; cursor:pointer;" onclick="closeModal()">✕</button>
         </div>
         <div id="chapterGrid" class="chapter-grid"></div>
+        <button id="confirmBtn" class="confirm-btn" onclick="submitBatch()" disabled>확인</button>
     </div>
 </div>
 
@@ -137,6 +142,10 @@
     const modalOverlay = document.getElementById('modalOverlay');
     const modalBibleName = document.getElementById('modalBibleName');
     const chapterGrid = document.getElementById('chapterGrid');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    let currentBibleId = null;
+    let selectedChapters = new Set();
 
     function getLevelClass(count) {
         if (!count || count === 0) return 'level-0';
@@ -144,37 +153,74 @@
         return c >= 4 ? 'level-4' : 'level-' + c;
     }
 
-    function recordProgress(bibleId, chapter, btnElement) {
-        fetch('/api/v1/progress', {
+    function toggleChapter(chapter, btnElement) {
+        if (selectedChapters.has(chapter)) {
+            selectedChapters.delete(chapter);
+            btnElement.classList.remove('selected');
+        } else {
+            selectedChapters.add(chapter);
+            btnElement.classList.add('selected');
+        }
+        confirmBtn.disabled = selectedChapters.size === 0;
+    }
+
+    function submitBatch() {
+        if (selectedChapters.size === 0) return;
+
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = '저장 중...';
+
+        fetch('/api/v1/progress/batch', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ bibleId: bibleId, chapterNumber: chapter })
+            body: JSON.stringify({ bibleId: currentBibleId, chapterNumbers: Array.from(selectedChapters) })
         }).then(res => {
             if (res.ok) {
-                // 💡 문자열 키로 확실히 변환해서 저장!
-                const bId = bibleId.toString();
-                const cNum = chapter.toString();
-
+                const bId = currentBibleId.toString();
                 if (!userProgress[bId]) userProgress[bId] = {};
-                let nextCount = (parseInt(userProgress[bId][cNum] || 0)) + 1;
-                userProgress[bId][cNum] = nextCount;
 
-                // 2. 모달 내 버튼 색상 변경
-                btnElement.className = 'chapter-btn ' + getLevelClass(nextCount);
+                selectedChapters.forEach(chapter => {
+                    const cNum = chapter.toString();
+                    const nextCount = (parseInt(userProgress[bId][cNum] || 0)) + 1;
+                    userProgress[bId][cNum] = nextCount;
 
-                // 3. 메인 카드의 툴팁 잔디 실시간 변경
-                const bibleCard = document.getElementById(`bible-card-${bibleId}`);
-                if (bibleCard) {
-                    const grassBox = bibleCard.querySelector(`.grass-box[data-chapter="${chapter}"]`);
-                    if (grassBox) {
-                        grassBox.className = 'grass-box ' + getLevelClass(nextCount);
+                    // 모달 버튼 색상 업데이트
+                    const btn = chapterGrid.querySelector(`[data-chapter="${chapter}"]`);
+                    if (btn) {
+                        btn.className = 'chapter-btn ' + getLevelClass(nextCount);
                     }
-                }
+
+                    // 메인 카드 잔디 실시간 업데이트
+                    const bibleCard = document.getElementById(`bible-card-${currentBibleId}`);
+                    if (bibleCard) {
+                        const grassBox = bibleCard.querySelector(`.grass-box[data-chapter="${chapter}"]`);
+                        if (grassBox) {
+                            grassBox.className = 'grass-box ' + getLevelClass(nextCount);
+                        }
+                    }
+                });
+
+                selectedChapters.clear();
+                confirmBtn.textContent = '확인';
+                confirmBtn.disabled = true;
+            } else {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = '확인';
+                alert('저장에 실패했습니다. 다시 시도해주세요.');
             }
+        }).catch(() => {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = '확인';
+            alert('저장에 실패했습니다. 다시 시도해주세요.');
         });
     }
 
     function openModal(id, name, totalChapters) {
+        currentBibleId = id;
+        selectedChapters.clear();
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = '확인';
+
         modalBibleName.innerText = name;
         chapterGrid.innerHTML = '';
         const bibleData = userProgress[id.toString()] || {};
@@ -182,8 +228,9 @@
             const btn = document.createElement('button');
             const count = bibleData[i.toString()] || 0;
             btn.className = 'chapter-btn ' + getLevelClass(count);
+            btn.dataset.chapter = i;
             btn.innerText = i;
-            btn.onclick = () => recordProgress(id, i, btn);
+            btn.onclick = () => toggleChapter(i, btn);
             chapterGrid.appendChild(btn);
         }
         modalOverlay.classList.add('active-modal');
@@ -191,6 +238,7 @@
     }
 
     function closeModal() {
+        selectedChapters.clear();
         modalOverlay.classList.remove('active-modal');
         document.body.style.overflow = 'auto';
     }

@@ -37,4 +37,8 @@ public class DailyProgress {
     public void increaseCount() {
         count++;
     }
+
+    public void increaseCountBy(int amount) {
+        count += amount;
+    }
 }
