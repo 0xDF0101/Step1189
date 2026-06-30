@@ -1,6 +1,7 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
         @UniqueConstraint(columnNames = {"user_id", "readDate"})
         // 한 유저는 날짜당 하나의 Row만 생성되도록 '복합 유니크 제약 조건'을 설정한 것
 })
+@Getter
 @NoArgsConstructor
 public class DailyProgress {
 

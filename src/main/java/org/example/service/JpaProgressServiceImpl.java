@@ -9,12 +9,14 @@ import org.example.repository.ProgressRepository;
 import org.example.dto.progress.BatchRecordRequest;
 import org.example.dto.progress.DailyProgressDto;
 import org.example.dto.progress.RecordRequest;
+import org.example.dto.progress.StatsResponse;
 import org.example.repository.UserRepository;
 import org.example.entity.Bible;
 import org.example.entity.Progress;
 import org.example.entity.DailyProgress;
 import org.example.entity.User;
 import org.example.exception.EntityNotFoundException;
+import org.example.model.Testament;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -162,6 +164,46 @@ public class JpaProgressServiceImpl implements ProgressService {
         }
 
         return fullGrassData;
+    }
+
+    @Override
+    public StatsResponse getStats(Long userId) {
+        List<Progress> progressList = progressRepository.findAllByUserId(userId);
+
+        // 구약/신약 전체 장 수
+        List<Bible> allBibles = bibleRepository.findAll();
+        int oldTotal = allBibles.stream().filter(b -> b.getTestament() == Testament.OLD).mapToInt(Bible::getTotalChapter).sum();
+        int newTotal = allBibles.stream().filter(b -> b.getTestament() == Testament.NEW).mapToInt(Bible::getTotalChapter).sum();
+
+        // 읽은 장 수 (한 번 이상 읽은 장만)
+        int oldRead = 0, newRead = 0;
+        for (Progress p : progressList) {
+            int readCount = convertBitmapToReadMap(p.getProgressData()).size();
+            if (p.getBible().getTestament() == Testament.OLD) oldRead += readCount;
+            else newRead += readCount;
+        }
+
+        // 오늘 읽은 장
+        LocalDate today = LocalDate.now();
+        int todayCount = dailyProgressRepository.findByUserIdAndReadDate(userId, today)
+                .map(DailyProgress::getCount)
+                .orElse(0);
+
+        // 연속 읽기 스트릭
+        Set<LocalDate> readDates = dailyProgressRepository
+                .getDailyReadingStats(userId, today.minusYears(1))
+                .stream()
+                .map(DailyProgressDto::readDate)
+                .collect(java.util.stream.Collectors.toSet());
+
+        int streak = 0;
+        LocalDate check = readDates.contains(today) ? today : today.minusDays(1);
+        while (readDates.contains(check)) {
+            streak++;
+            check = check.minusDays(1);
+        }
+
+        return new StatsResponse(oldRead + newRead, oldTotal + newTotal, oldRead, oldTotal, newRead, newTotal, todayCount, streak);
     }
 
     // map -> bitmap

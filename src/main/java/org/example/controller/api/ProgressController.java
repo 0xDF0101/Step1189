@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.service.ProgressService;
 import org.example.dto.progress.BatchRecordRequest;
 import org.example.dto.progress.RecordRequest;
+import org.example.dto.progress.StatsResponse;
 import org.example.utility.annotation.LoginUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,5 +57,13 @@ public class ProgressController {
     ) {
         Map<LocalDate, Integer> result = progressService.getDailyProgress(userId);
         return ResponseEntity.ok().body(result);
+    }
+
+    // 통계 조회
+    @GetMapping("/stats")
+    public ResponseEntity<StatsResponse> getStats(
+            @LoginUser Long userId
+    ) {
+        return ResponseEntity.ok().body(progressService.getStats(userId));
     }
 }
