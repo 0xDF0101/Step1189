@@ -23,4 +23,8 @@ public interface DailyProgressRepository extends JpaRepository<DailyProgress, Lo
             "GROUP BY dp.readDate")
     List<DailyProgressDto> getDailyReadingStats(@Param("userId") Long userId, @Param("oneYearAgo") LocalDate oneYearAgo);
 
+    @Query("SELECT COALESCE(SUM(dp.count), 0) FROM DailyProgress dp " +
+            "WHERE dp.user.id = :userId AND dp.readDate BETWEEN :start AND :end")
+    int sumChaptersInPeriod(@Param("userId") Long userId, @Param("start") LocalDate start, @Param("end") LocalDate end);
+
 }

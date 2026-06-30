@@ -24,6 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/signup").setViewName("signup");
         registry.addViewController("/signup/set-username").setViewName("signup/set-username");
+        registry.addViewController("/plan").setViewName("plan");
     }
 
     // ArgumentResolver 등록

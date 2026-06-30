@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1189 | 읽기 계획</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        :root { --green: #2ea44f; --red: #cf222e; --gray: #57606a; --border: #d0d7de; --bg: #f8f9fa; }
+
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: #24292f; margin: 0; padding: 0 0 80px; }
+
+        .navbar { background: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 0 rgba(27,31,35,0.06); }
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--green); text-decoration: none; }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 30px 20px; }
+
+        /* ── 계획 없음 ── */
+        .setup-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 30px; }
+        .setup-title { font-size: 1.3rem; font-weight: 800; margin: 0 0 6px; }
+        .setup-desc { color: var(--gray); font-size: 0.9rem; margin: 0 0 24px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; }
+        .form-input { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; font-family: inherit; box-sizing: border-box; }
+        .form-input:focus { outline: none; border-color: var(--green); }
+
+        .preview-box { background: #f0faf3; border: 1px solid #9be9a8; border-radius: 8px; padding: 14px 16px; margin: 20px 0; display: none; }
+        .preview-label { font-size: 0.8rem; color: var(--gray); margin-bottom: 4px; }
+        .preview-value { font-size: 1.5rem; font-weight: 800; color: var(--green); }
+        .preview-sub { font-size: 0.8rem; color: var(--gray); margin-top: 2px; }
+
+        .btn-primary { display: block; width: 100%; padding: 14px; background: var(--green); color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+        .btn-primary:hover { filter: brightness(0.92); }
+        .btn-primary:disabled { background: #adb5bd; cursor: not-allowed; }
+
+        /* ── 계획 있음 ── */
+        .plan-header { margin-bottom: 20px; }
+        .plan-period { font-size: 0.85rem; color: var(--gray); font-weight: 600; margin-bottom: 4px; }
+        .plan-headline { font-size: 1.6rem; font-weight: 800; }
+        .plan-headline span { color: var(--green); }
+
+        .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+        .stat-box { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+        .stat-box-label { font-size: 0.72rem; color: var(--gray); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+        .stat-box-value { font-size: 1.3rem; font-weight: 800; color: #24292f; }
+        .stat-box-unit { font-size: 0.8rem; color: var(--gray); font-weight: 500; }
+
+        .progress-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 14px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; }
+        .progress-bar { height: 10px; background: #ebedf0; border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--green); border-radius: 5px; transition: width 0.8s ease; width: 0%; }
+
+        .pace-card { border-radius: 10px; padding: 16px 20px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .pace-card.on-track { background: #f0faf3; border: 1px solid #9be9a8; }
+        .pace-card.behind { background: #fff5f5; border: 1px solid #ffb8b8; }
+        .pace-label { font-size: 0.85rem; font-weight: 700; }
+        .pace-label.on-track { color: var(--green); }
+        .pace-label.behind { color: var(--red); }
+        .pace-detail { font-size: 0.8rem; color: var(--gray); margin-top: 3px; }
+        .pace-adj { text-align: right; }
+        .pace-adj-label { font-size: 0.72rem; color: var(--gray); }
+        .pace-adj-value { font-size: 1.2rem; font-weight: 800; }
+        .pace-adj-value.on-track { color: var(--green); }
+        .pace-adj-value.behind { color: var(--red); }
+
+        .btn-secondary { display: block; width: 100%; padding: 12px; background: white; color: var(--gray); border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 10px; }
+        .btn-secondary:hover { border-color: var(--green); color: var(--green); }
+
+        /* ── 하단 네비 ── */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--border); display: flex; z-index: 200; padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; text-decoration: none; color: var(--gray); font-size: 0.72rem; font-weight: 600; gap: 3px; transition: color 0.15s; }
+        .nav-item.active { color: var(--green); }
+        .nav-item svg { width: 22px; height: 22px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/main" class="logo">Step 1189 🌿</a>
+</nav>
+
+<div class="container">
+
+    <!-- 계획 없음: 설정 폼 -->
+    <div id="setupView" style="display:none;">
+        <div class="setup-card">
+            <div class="setup-title">읽기 계획 세우기</div>
+            <div class="setup-desc">기간을 설정하면 하루에 읽어야 할 분량과 페이스를 알려드려요.</div>
+
+            <div class="form-group">
+                <label class="form-label">시작일</label>
+                <input type="date" id="startDate" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">종료일</label>
+                <input type="date" id="endDate" class="form-input">
+            </div>
+
+            <div id="previewBox" class="preview-box">
+                <div class="preview-label">하루 목표</div>
+                <div class="preview-value" id="previewDaily">-</div>
+                <div class="preview-sub" id="previewSub"></div>
+            </div>
+
+            <button class="btn-primary" id="savePlanBtn" onclick="savePlan()" disabled>계획 시작</button>
+        </div>
+    </div>
+
+    <!-- 계획 있음: 통계 -->
+    <div id="statsView" style="display:none;">
+        <div class="plan-header">
+            <div class="plan-period" id="planPeriod"></div>
+            <div class="plan-headline">하루 <span id="targetPerDay">-</span>장씩 읽는 계획</div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-label">
+                <span>전체 진도</span>
+                <span><span id="chaptersRead">-</span> / 1,189장 (<span id="pctDisplay">-</span>)</span>
+            </div>
+            <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="stat-box-label">총 기간</div>
+                <div class="stat-box-value" id="totalDays">-<span class="stat-box-unit">일</span></div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-label">경과</div>
+                <div class="stat-box-value" id="daysElapsed">-<span class="stat-box-unit">일</span></div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-label">남은 날</div>
+                <div class="stat-box-value" id="daysRemaining">-<span class="stat-box-unit">일</span></div>
+            </div>
+        </div>
+
+        <div id="paceCard" class="pace-card">
+            <div>
+                <div id="paceLabel" class="pace-label"></div>
+                <div id="paceDetail" class="pace-detail"></div>
+            </div>
+            <div class="pace-adj">
+                <div class="pace-adj-label">조정 목표</div>
+                <div id="adjTarget" class="pace-adj-value">-장/일</div>
+            </div>
+        </div>
+
+        <button class="btn-secondary" onclick="showSetup()">계획 변경</button>
+    </div>
+
+</div>
+
+<nav class="bottom-nav">
+    <a href="/main" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75" />
+        </svg>
+        홈
+    </a>
+    <a href="/bibles" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.966 8.966 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+        성경
+    </a>
+    <a href="/plan" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5m-9-6h.008v.008H12V9.75zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm-3 0h.008v.008H9v-.008zm6 0h.008v.008H15v-.008z" />
+        </svg>
+        계획
+    </a>
+</nav>
+
+<script>
+    const startInput = document.getElementById('startDate');
+    const endInput = document.getElementById('endDate');
+    const savePlanBtn = document.getElementById('savePlanBtn');
+
+    // 시작일 기본값: 오늘
+    startInput.value = new Date().toISOString().split('T')[0];
+
+    [startInput, endInput].forEach(el => el.addEventListener('change', updatePreview));
+
+    function updatePreview() {
+        const s = new Date(startInput.value);
+        const e = new Date(endInput.value);
+        if (!startInput.value || !endInput.value || e <= s) {
+            document.getElementById('previewBox').style.display = 'none';
+            savePlanBtn.disabled = true;
+            return;
+        }
+        const days = Math.round((e - s) / 86400000) + 1;
+        const perDay = Math.ceil(1189 / days);
+        document.getElementById('previewDaily').textContent = perDay + '장';
+        document.getElementById('previewSub').textContent = `총 ${days}일 계획 · 1,189장 완독`;
+        document.getElementById('previewBox').style.display = 'block';
+        savePlanBtn.disabled = false;
+    }
+
+    function savePlan() {
+        savePlanBtn.disabled = true;
+        savePlanBtn.textContent = '저장 중...';
+        fetch('/api/v1/plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ startDate: startInput.value, endDate: endInput.value })
+        }).then(res => {
+            if (res.ok) loadPlan();
+            else { savePlanBtn.disabled = false; savePlanBtn.textContent = '계획 시작'; alert('저장 실패'); }
+        });
+    }
+
+    function showSetup() {
+        document.getElementById('statsView').style.display = 'none';
+        document.getElementById('setupView').style.display = 'block';
+        savePlanBtn.textContent = '계획 시작';
+        updatePreview();
+    }
+
+    function renderStats(s) {
+        document.getElementById('setupView').style.display = 'none';
+        document.getElementById('statsView').style.display = 'block';
+
+        const fmt = d => d.replace(/-/g, '.');
+        document.getElementById('planPeriod').textContent = `${fmt(s.startDate)} ~ ${fmt(s.endDate)}`;
+        document.getElementById('targetPerDay').textContent = s.targetPerDay;
+        document.getElementById('chaptersRead').textContent = s.chaptersReadInPeriod;
+        document.getElementById('pctDisplay').textContent = s.percentComplete.toFixed(1) + '%';
+        document.getElementById('progressFill').style.width = Math.min(100, s.percentComplete).toFixed(1) + '%';
+
+        document.getElementById('totalDays').innerHTML = `${s.totalDays}<span class="stat-box-unit">일</span>`;
+        document.getElementById('daysElapsed').innerHTML = `${s.daysElapsed}<span class="stat-box-unit">일</span>`;
+        document.getElementById('daysRemaining').innerHTML = `${s.daysRemaining}<span class="stat-box-unit">일</span>`;
+
+        const paceCard = document.getElementById('paceCard');
+        const paceLabel = document.getElementById('paceLabel');
+        const paceDetail = document.getElementById('paceDetail');
+        const adjTarget = document.getElementById('adjTarget');
+        const diff = s.chaptersReadInPeriod - s.expectedByNow;
+
+        if (s.onTrack) {
+            paceCard.className = 'pace-card on-track';
+            paceLabel.className = 'pace-label on-track';
+            paceLabel.textContent = '페이스 유지 중';
+            paceDetail.textContent = `목표보다 ${diff}장 앞서가고 있어요`;
+            adjTarget.className = 'pace-adj-value on-track';
+        } else {
+            paceCard.className = 'pace-card behind';
+            paceLabel.className = 'pace-label behind';
+            paceLabel.textContent = '페이스 뒤처짐';
+            paceDetail.textContent = `목표보다 ${Math.abs(diff)}장 부족해요`;
+            adjTarget.className = 'pace-adj-value behind';
+        }
+        adjTarget.textContent = `${s.adjustedDailyTarget}장/일`;
+    }
+
+    async function loadPlan() {
+        const res = await fetch('/api/v1/plan');
+        if (res.status === 204) {
+            document.getElementById('setupView').style.display = 'block';
+        } else {
+            renderStats(await res.json());
+        }
+    }
+
+    loadPlan();
+</script>
+
+</body>
+</html>
