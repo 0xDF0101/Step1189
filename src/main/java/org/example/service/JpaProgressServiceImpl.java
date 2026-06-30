@@ -166,6 +166,24 @@ public class JpaProgressServiceImpl implements ProgressService {
         return fullGrassData;
     }
 
+    @Transactional
+    public void cancelBatchProgress(Long userId, BatchRecordRequest request) {
+        if (request.chapterNumbers() == null || request.chapterNumbers().isEmpty()) return;
+
+        Progress progress = progressRepository.findByUserIdAndBibleId(userId, request.bibleId())
+                .orElseThrow(() -> new EntityNotFoundException("읽기 기록이 없습니다."));
+
+        Map<Integer, Integer> map = convertBitmapToReadMap(progress.getProgressData());
+
+        for (int chapter : request.chapterNumbers()) {
+            int current = map.getOrDefault(chapter, 0);
+            if (current <= 1) map.remove(chapter);
+            else map.put(chapter, current - 1);
+        }
+
+        progress.updateProgressData(convertReadMapToBitmap(map, progress.getBible().getTotalChapter()));
+    }
+
     @Override
     public StatsResponse getStats(Long userId) {
         List<Progress> progressList = progressRepository.findAllByUserId(userId);

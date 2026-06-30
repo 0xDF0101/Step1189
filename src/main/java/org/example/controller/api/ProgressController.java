@@ -50,6 +50,16 @@ public class ProgressController {
         return ResponseEntity.ok().build();
     }
 
+    // 여러 장의 읽기 기록 취소
+    @PostMapping("/progress/batch/cancel")
+    public ResponseEntity<Void> cancelBatchProgress(
+            @LoginUser Long userId,
+            @RequestBody BatchRecordRequest request
+    ) {
+        progressService.cancelBatchProgress(userId, request);
+        return ResponseEntity.ok().build();
+    }
+
     // 하루에 읽은 양을 가져옴
     @GetMapping("/main")
     public ResponseEntity<Map<LocalDate, Integer>> getDailyProgress(

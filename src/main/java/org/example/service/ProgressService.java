@@ -11,6 +11,7 @@ public interface ProgressService {
     Map<Integer, Map<Integer, Integer>> getAllProgress(Long userId);
     void recordProgress(Long userId, RecordRequest request);
     void recordBatchProgress(Long userId, BatchRecordRequest request);
+    void cancelBatchProgress(Long userId, BatchRecordRequest request);
     Map<LocalDate, Integer> getDailyProgress(Long userId);
     StatsResponse getStats(Long userId);
 }
