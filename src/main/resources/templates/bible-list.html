@@ -113,12 +113,8 @@
                 <span class="tooltip-text" th:text="${bible.korName} + ' Progress'"></span>
                 <div class="grass-grid">
                     <div th:each="i : ${#numbers.sequence(1, bible.totalChapter)}"
-                         class="grass-box"
-                         th:attr="data-chapter=${i}"
-                         th:with="
-            bibleData=${userProgress[bible.id] ?: userProgress[bible.id.toString()]},
-            count=${bibleData != null ? (bibleData[i] ?: bibleData[i.toString()] ?: 0) : 0}"
-                         th:classappend="${'level-' + (count > 4 ? 4 : count)}">
+                         class="grass-box level-0"
+                         th:attr="data-chapter=${i}">
                     </div>
                 </div>
             </div>
@@ -214,6 +210,19 @@
             alert('저장에 실패했습니다. 다시 시도해주세요.');
         });
     }
+
+    function initGrass() {
+        document.querySelectorAll('.bible-card').forEach(card => {
+            const bibleId = card.id.replace('bible-card-', '');
+            const bibleData = userProgress[bibleId] || {};
+            card.querySelectorAll('.grass-box').forEach(box => {
+                const count = parseInt(bibleData[box.dataset.chapter] || 0);
+                box.className = 'grass-box ' + getLevelClass(count);
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initGrass);
 
     function openModal(id, name, totalChapters) {
         currentBibleId = id;
