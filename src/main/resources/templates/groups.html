@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1189 | 그룹</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        :root {
+            --green: #2ea44f;
+            --green-light: #f0faf4;
+            --bg: #f4f5f8;
+            --card: #ffffff;
+            --text-primary: #171717;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 6px rgba(0,0,0,0.05);
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .navbar {
+            background: var(--bg);
+            padding: 1.1rem 1.5rem 0.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--green);
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 8px 16px 90px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 8px 0;
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 9px 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            font-family: 'Pretendard', sans-serif;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .btn:active { opacity: 0.8; }
+        .btn-primary { background: var(--green); color: #fff; }
+        .btn-secondary { background: var(--card); color: var(--text-primary); border: 1.5px solid var(--border); }
+
+        /* Group card */
+        .group-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            padding: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .group-card:active { transform: scale(0.99); }
+
+        .group-card-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .group-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--green);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .group-info { flex: 1; }
+
+        .group-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .group-name {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .badge-leader {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .group-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .group-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        .invite-code {
+            font-family: monospace;
+            background: var(--bg);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state p { font-size: 0.95rem; margin: 8px 0 24px; }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.visible { display: flex; }
+
+        .modal {
+            background: var(--card);
+            border-radius: 24px 24px 0 0;
+            padding: 28px 24px max(24px, env(safe-area-inset-bottom));
+            width: 100%;
+            max-width: 680px;
+        }
+
+        .modal-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0 0 20px;
+        }
+
+        .form-group { margin-bottom: 12px; }
+
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Pretendard', sans-serif;
+            color: var(--text-primary);
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        input:focus, textarea:focus, select:focus { border-color: var(--green); background: #fff; }
+        textarea { resize: none; height: 72px; }
+
+        .btn-full {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+        }
+
+        .modal-close {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            font-family: 'Pretendard', sans-serif;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .msg {
+            font-size: 0.83rem;
+            color: #ef4444;
+            margin: 6px 0 0;
+            min-height: 16px;
+        }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 4px 10px;
+            transition: color 0.15s;
+        }
+
+        .nav-item.active { color: var(--green); }
+        .nav-item svg { width: 22px; height: 22px; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="/main" class="logo">Step 1189</a>
+</div>
+
+<div class="container">
+    <div class="page-header">
+        <h2 class="page-title">내 그룹</h2>
+        <div class="btn-row">
+            <button class="btn btn-secondary" onclick="showJoinModal()">코드로 참여</button>
+            <button class="btn btn-primary" onclick="showCreateModal()">그룹 만들기</button>
+        </div>
+    </div>
+
+    <div id="groupsList">
+        <div class="empty-state"><p>로딩 중...</p></div>
+    </div>
+</div>
+
+<!-- 그룹 만들기 모달 -->
+<div class="modal-overlay" id="createModal">
+    <div class="modal">
+        <p class="modal-title">새 그룹 만들기</p>
+        <div class="form-group">
+            <label class="form-label">그룹 이름 *</label>
+            <input type="text" id="createName" placeholder="그룹 이름 (2~50자)" maxlength="50">
+        </div>
+        <div class="form-group">
+            <label class="form-label">그룹 설명</label>
+            <textarea id="createDesc" placeholder="간단한 설명 (선택)" maxlength="200"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">최대 인원</label>
+            <select id="createMax">
+                <option value="5">5명</option>
+                <option value="10">10명</option>
+                <option value="20" selected>20명</option>
+                <option value="30">30명</option>
+                <option value="50">50명</option>
+            </select>
+        </div>
+        <p class="msg" id="createMsg"></p>
+        <button class="btn btn-primary btn-full" onclick="submitCreate()">만들기</button>
+        <button class="modal-close" onclick="closeCreateModal()">취소</button>
+    </div>
+</div>
+
+<!-- 코드로 참여 모달 -->
+<div class="modal-overlay" id="joinModal">
+    <div class="modal">
+        <p class="modal-title">초대 코드로 참여</p>
+        <div class="form-group">
+            <label class="form-label">초대 코드</label>
+            <input type="text" id="joinCode" placeholder="6자리 코드 입력" maxlength="6"
+                   style="text-transform: uppercase; letter-spacing: 2px; font-size: 1.1rem; text-align: center;">
+        </div>
+        <p class="msg" id="joinMsg"></p>
+        <button class="btn btn-primary btn-full" onclick="submitJoin()">참여하기</button>
+        <button class="modal-close" onclick="closeJoinModal()">취소</button>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="/main" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75" />
+        </svg>
+        홈
+    </a>
+    <a href="/bibles" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.966 8.966 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+        성경
+    </a>
+    <a href="/groups" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+        </svg>
+        그룹
+    </a>
+    <a href="/plan" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5m-9-6h.008v.008H12V9.75zm0 3h.008v.008H12v-.008zm0 3h.008v.008H12v-.008zm-3 0h.008v.008H9v-.008zm6 0h.008v.008H15v-.008z" />
+        </svg>
+        계획
+    </a>
+    <a href="/settings" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        설정
+    </a>
+</nav>
+
+<script>
+    async function loadGroups() {
+        const res = await fetch('/api/v1/groups', { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return;
+        const groups = await res.json();
+        renderGroups(groups);
+    }
+
+    function renderGroups(groups) {
+        const container = document.getElementById('groupsList');
+        if (groups.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <p>아직 속한 그룹이 없습니다<br>그룹을 만들거나 초대 코드로 참여해보세요</p>
+                </div>`;
+            return;
+        }
+        container.innerHTML = groups.map(g => `
+            <div class="group-card" onclick="window.location.href='/groups/${g.id}'">
+                <div class="group-card-top">
+                    <div class="group-avatar">${g.name.charAt(0).toUpperCase()}</div>
+                    <div class="group-info">
+                        <div class="group-name-row">
+                            <span class="group-name">${escHtml(g.name)}</span>
+                            ${g.myRole === 'LEADER' ? '<span class="badge-leader">리더</span>' : ''}
+                        </div>
+                        <div class="group-desc">${escHtml(g.description || '설명 없음')}</div>
+                    </div>
+                </div>
+                <div class="group-footer">
+                    <span>${g.memberCount}/${g.maxMembers}명</span>
+                    <span class="invite-code">${g.inviteCode}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function escHtml(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function showCreateModal() { document.getElementById('createModal').classList.add('visible'); }
+    function closeCreateModal() {
+        document.getElementById('createModal').classList.remove('visible');
+        document.getElementById('createMsg').textContent = '';
+    }
+    function showJoinModal() { document.getElementById('joinModal').classList.add('visible'); }
+    function closeJoinModal() {
+        document.getElementById('joinModal').classList.remove('visible');
+        document.getElementById('joinMsg').textContent = '';
+    }
+
+    async function submitCreate() {
+        const name = document.getElementById('createName').value.trim();
+        const description = document.getElementById('createDesc').value.trim();
+        const maxMembers = parseInt(document.getElementById('createMax').value);
+
+        const res = await fetch('/api/v1/groups', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description, maxMembers })
+        });
+
+        if (res.ok) {
+            const groupId = await res.json();
+            window.location.href = `/groups/${groupId}`;
+        } else {
+            const errors = await res.json();
+            document.getElementById('createMsg').textContent = errors[0]?.message || '오류가 발생했습니다.';
+        }
+    }
+
+    async function submitJoin() {
+        const inviteCode = document.getElementById('joinCode').value.trim().toUpperCase();
+
+        const res = await fetch('/api/v1/groups/join', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ inviteCode })
+        });
+
+        if (res.ok) {
+            const groupId = await res.json();
+            window.location.href = `/groups/${groupId}`;
+        } else {
+            const errors = await res.json();
+            document.getElementById('joinMsg').textContent = errors[0]?.message || '오류가 발생했습니다.';
+        }
+    }
+
+    loadGroups();
+</script>
+</body>
+</html>

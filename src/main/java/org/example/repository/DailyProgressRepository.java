@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.dto.progress.DailyProgressDto;
 import org.example.entity.DailyProgress;
+import org.example.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,5 +27,10 @@ public interface DailyProgressRepository extends JpaRepository<DailyProgress, Lo
     @Query("SELECT COALESCE(SUM(dp.count), 0) FROM DailyProgress dp " +
             "WHERE dp.user.id = :userId AND dp.readDate BETWEEN :start AND :end")
     int sumChaptersInPeriod(@Param("userId") Long userId, @Param("start") LocalDate start, @Param("end") LocalDate end);
+
+    void deleteByUser(User user);
+
+    @Query("SELECT COALESCE(SUM(dp.count), 0) FROM DailyProgress dp WHERE dp.user.id = :userId")
+    int sumAllChaptersByUserId(@Param("userId") Long userId);
 
 }

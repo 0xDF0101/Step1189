@@ -51,6 +51,12 @@ public class SecurityConfig {
                         .loginPage("/login")
 //                        .defaultSuccessUrl("/main") // OAuth로 로그인 성공시 보여줄 페이지
                         .successHandler(oAuth2SuccessHandler)
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                 );
 
         return http.build();

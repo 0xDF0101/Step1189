@@ -15,7 +15,8 @@ public record UserInfo(
         Boolean publicStatus,
         String statusMessage,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String socialType
 ) {
     public UserInfo(User user) {
         this(
@@ -26,7 +27,8 @@ public record UserInfo(
                 user.getPublicStatus(),
                 user.getStatusMessage(),
                 user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getUpdatedAt(),
+                user.getSocialType()
         );
     }
 }

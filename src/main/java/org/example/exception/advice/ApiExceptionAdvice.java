@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dto.common.ErrorResponseDto;
 import org.example.exception.EmailDuplicateException;
+import org.example.exception.InvalidPasswordException;
 import org.example.exception.UsernameDuplicateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,18 @@ public class ApiExceptionAdvice {
         List<ErrorResponseDto> errors = List.of(new ErrorResponseDto(field, e.getMessage()));
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errors);
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<List<ErrorResponseDto>> handleInvalidPasswordException(InvalidPasswordException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(List.of(new ErrorResponseDto("currentPassword", e.getMessage())));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<List<ErrorResponseDto>> handleIllegalStateException(IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(List.of(new ErrorResponseDto("group", e.getMessage())));
     }
 
     /**

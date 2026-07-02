@@ -5,8 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.exception.EmailDuplicateException;
 import org.example.exception.EmailNotFoundException;
+import org.example.exception.InvalidPasswordException;
 import org.example.exception.UsernameDuplicateException;
 import org.example.model.Role;
+import org.example.repository.DailyProgressRepository;
+import org.example.repository.GroupMemberRepository;
+import org.example.repository.ReadingPlanRepository;
 import org.example.repository.UserRepository;
 import org.example.entity.User;
 import org.example.exception.EntityNotFoundException;
@@ -24,6 +28,9 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ReadingPlanRepository readingPlanRepository;
+    private final DailyProgressRepository dailyProgressRepository;
+    private final GroupMemberRepository groupMemberRepository;
 
     public UserInfo getUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 회원을 찾을 수 없습니다."));
@@ -66,5 +73,35 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
 
         user.updateUsernameAndRole(username, Role.USER); // Dirty Checking
+    }
+
+    @Transactional
+    public void changeUsername(Long userId, String username) {
+        if (userRepository.existsUserByUsername(username)) {
+            throw new UsernameDuplicateException("이미 사용 중인 닉네임입니다.");
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
+        user.updateUsername(username);
+    }
+
+    @Transactional
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new InvalidPasswordException("현재 비밀번호가 일치하지 않습니다.");
+        }
+        user.updatePassword(passwordEncoder.encode(newPassword));
+    }
+
+    @Transactional
+    public void deleteAccount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
+        groupMemberRepository.deleteByUser(user);
+        readingPlanRepository.deleteByUser(user);
+        dailyProgressRepository.deleteByUser(user);
+        userRepository.delete(user);
     }
 }
