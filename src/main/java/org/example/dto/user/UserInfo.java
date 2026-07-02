@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record UserInfo(
-        String nickname,
+        String username,
+        String displayName,
         List<Progress> progressList,
         String email,
         Role role,
@@ -21,6 +22,7 @@ public record UserInfo(
     public UserInfo(User user) {
         this(
                 user.getUsername(),
+                user.getDisplayName(),
                 user.getProgressList(),
                 user.getEmail(),
                 user.getRole(),

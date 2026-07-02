@@ -44,11 +44,8 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = fetchFromProvider(userRequest);
 
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        String name = (String) attributes.get("name");
-
-        String username = "TEMP_" + UUID.randomUUID().toString().substring(0, 8) + name;
-        // --> 추후에 직접 username을 정할 수 있도록 하고, 우선은 그냥 임시로 채워넣는다.
         String email = (String) attributes.get("email");
+        String username = "TEMP_" + UUID.randomUUID().toString().replace("-", "").substring(0, 10);
         // 💡 1. 제공자 정보 가져오기 (google)
         String provider = userRequest.getClientRegistration().getRegistrationId();
         // 💡 2. 제공자 고유 ID 가져오기 (구글은 "sub"이라는 키를 사용해)

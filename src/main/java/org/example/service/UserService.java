@@ -52,6 +52,7 @@ public class UserService {
 
         User user = User.builder()
                 .username(dto.username())
+                .displayName(dto.displayName())
                 .password(encodedPassword)
                 .email(dto.email())
                 .role(Role.USER)
@@ -62,27 +63,43 @@ public class UserService {
         log.info("user 저장 완료 : {}", user.getId());
     }
 
-    // OAuth로 회원가입 시, username 입력받고 업데이트 하기
+    // OAuth 회원가입 1단계: @handle 설정
     @Transactional
     public void updateUsername(Long userId, String username) {
-
-        if(userRepository.existsUserByUsername(username)) {
-            throw new UsernameDuplicateException("이미 사용 중인 사용자 이름입니다.");
-        }
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
-
-        user.updateUsernameAndRole(username, Role.USER); // Dirty Checking
-    }
-
-    @Transactional
-    public void changeUsername(Long userId, String username) {
         if (userRepository.existsUserByUsername(username)) {
-            throw new UsernameDuplicateException("이미 사용 중인 닉네임입니다.");
+            throw new UsernameDuplicateException("이미 사용 중인 아이디입니다.");
         }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
         user.updateUsername(username);
+    }
+
+    // OAuth 회원가입 2단계: 표시 이름 설정 + USER 승격
+    @Transactional
+    public void setDisplayName(Long userId, String displayName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
+        user.updateDisplayName(displayName);
+        user.promoteToUser();
+    }
+
+    // 설정: @handle 변경 (중복 체크 있음)
+    @Transactional
+    public void changeUsername(Long userId, String username) {
+        if (userRepository.existsUserByUsername(username)) {
+            throw new UsernameDuplicateException("이미 사용 중인 아이디입니다.");
+        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
+        user.updateUsername(username);
+    }
+
+    // 설정: 표시 이름 변경 (중복 체크 없음)
+    @Transactional
+    public void changeDisplayName(Long userId, String displayName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 유저가 없습니다."));
+        user.updateDisplayName(displayName);
     }
 
     @Transactional

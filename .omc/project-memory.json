@@ -1,0 +1,397 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1782954489929,
+  "projectRoot": "/Users/eugene-ta/workspace/project/Step1189",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Java",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pom.xml"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "maven",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "ERD": {
+      "path": "ERD",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1782954489909,
+      "keyFiles": [
+        "Untitled.mwb",
+        "Untitled.mwb.bak"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 3,
+      "lastAccessed": 1782954489910,
+      "keyFiles": [
+        "auth-code-review.md",
+        "bible-service-review.md",
+        "bug-report-user-registration.md"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1782954489911,
+      "keyFiles": []
+    },
+    "target": {
+      "path": "target",
+      "purpose": null,
+      "fileCount": 3,
+      "lastAccessed": 1782954489913,
+      "keyFiles": [
+        "jacoco.exec",
+        "simple-service-1.0-SNAPSHOT.jar",
+        "simple-service-1.0-SNAPSHOT.jar.original"
+      ]
+    },
+    "src/test": {
+      "path": "src/test",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1782954489915,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/main/java/org/example/service/UserService.java",
+      "accessCount": 6,
+      "lastAccessed": 1782956241599,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/service/GroupService.java",
+      "accessCount": 6,
+      "lastAccessed": 1782956279255,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/main.html",
+      "accessCount": 5,
+      "lastAccessed": 1782956622580,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/plan.html",
+      "accessCount": 4,
+      "lastAccessed": 1782954259601,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/signup.html",
+      "accessCount": 4,
+      "lastAccessed": 1782956313938,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/settings.html",
+      "accessCount": 4,
+      "lastAccessed": 1782956381631,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/entity/User.java",
+      "accessCount": 3,
+      "lastAccessed": 1782956149025,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/config/SecurityConfig.java",
+      "accessCount": 3,
+      "lastAccessed": 1782956172075,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/controller/api/SettingsController.java",
+      "accessCount": 3,
+      "lastAccessed": 1782956261540,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/MemberRankingDto.java",
+      "accessCount": 3,
+      "lastAccessed": 1782956266164,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/GroupMemberDto.java",
+      "accessCount": 3,
+      "lastAccessed": 1782956269338,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/MemberGoalProgressDto.java",
+      "accessCount": 3,
+      "lastAccessed": 1782956274419,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/controller/api/GroupController.java",
+      "accessCount": 2,
+      "lastAccessed": 1782953961880,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/GroupDetailResponse.java",
+      "accessCount": 2,
+      "lastAccessed": 1782954045375,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/exception/advice/ApiExceptionAdvice.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956064138,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/repository/UserRepository.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956153312,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/service/auth/CustomUserDetailService.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956158680,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/controller/api/OAuth2SuccessHandler.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956183369,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/config/WebConfig.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956189073,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/service/auth/OAuth2UserService.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956199835,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/user/UserCreateRequest.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956206742,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/user/UsernameChangeRequest.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956212620,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/user/UserInfo.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956222178,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/controller/api/UserController.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956253903,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/login.html",
+      "accessCount": 2,
+      "lastAccessed": 1782956287436,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/signup/set-username.html",
+      "accessCount": 2,
+      "lastAccessed": 1782956333984,
+      "type": "file"
+    },
+    {
+      "path": "src/test/java/org/example/service/UserServiceTest.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956400407,
+      "type": "file"
+    },
+    {
+      "path": "src/test/java/org/example/controller/api/UserControllerTest.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956428855,
+      "type": "file"
+    },
+    {
+      "path": "src/test/java/org/example/service/auth/CustomUserDetailServiceTest.java",
+      "accessCount": 2,
+      "lastAccessed": 1782956436888,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/service/JpaProgressServiceImpl.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953586354,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/model/GroupRole.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953719068,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/entity/Group.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953722262,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/entity/GroupMember.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953725676,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/entity/GroupGoal.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953729309,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/repository/GroupRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953740632,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/repository/GroupMemberRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953743872,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/repository/GroupGoalRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953744958,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/GroupCreateRequest.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953747610,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/GroupJoinRequest.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953748726,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/GroupGoalRequest.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953750655,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/GroupGoalDto.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953754150,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/group/GroupSummaryResponse.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953755350,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/repository/DailyProgressRepository.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953785375,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/controller/GroupPageController.java",
+      "accessCount": 1,
+      "lastAccessed": 1782953849156,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/groups.html",
+      "accessCount": 1,
+      "lastAccessed": 1782954125402,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/group-detail.html",
+      "accessCount": 1,
+      "lastAccessed": 1782954226196,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/bible-list.html",
+      "accessCount": 1,
+      "lastAccessed": 1782954256100,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/service/auth/CustomUserDetails.java",
+      "accessCount": 1,
+      "lastAccessed": 1782955590740,
+      "type": "file"
+    },
+    {
+      "path": "src/main/java/org/example/dto/user/DisplayNameChangeRequest.java",
+      "accessCount": 1,
+      "lastAccessed": 1782956216708,
+      "type": "file"
+    },
+    {
+      "path": "src/main/resources/templates/signup/set-display-name.html",
+      "accessCount": 1,
+      "lastAccessed": 1782956354259,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

@@ -300,9 +300,9 @@
 
 <div class="container">
     <div class="profile-header">
-        <div class="avatar">U</div>
+        <div class="avatar" id="mainAvatar">?</div>
         <div class="welcome-text">
-            <h2>안녕하세요, 유진님!</h2>
+            <h2 id="mainGreeting">안녕하세요!</h2>
             <p>오늘도 말씀과 함께 한 걸음 더 나아가세요.</p>
         </div>
     </div>
@@ -365,9 +365,10 @@
 <script>
     async function initMain() {
         try {
-            const [grassRes, statsRes] = await Promise.all([
+            const [grassRes, statsRes, userRes] = await Promise.all([
                 fetch('/api/v1/main', { headers: { 'Accept': 'application/json' } }),
-                fetch('/api/v1/stats', { headers: { 'Accept': 'application/json' } })
+                fetch('/api/v1/stats', { headers: { 'Accept': 'application/json' } }),
+                fetch('/api/v1/settings/me', { headers: { 'Accept': 'application/json' } })
             ]);
 
             const grassData = await grassRes.json();
@@ -375,6 +376,13 @@
 
             renderGrass(grassData);
             renderStats(stats);
+
+            if (userRes.ok) {
+                const user = await userRes.json();
+                const name = user.displayName || user.username;
+                document.getElementById('mainGreeting').textContent = `안녕하세요, ${name}님!`;
+                document.getElementById('mainAvatar').textContent = name.charAt(0).toUpperCase();
+            }
         } catch (error) {
             console.error("데이터 로드 실패:", error);
             renderGrass({});

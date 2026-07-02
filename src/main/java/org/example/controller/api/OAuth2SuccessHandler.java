@@ -32,9 +32,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
-        String targetUrl = principal.getUser().getRole() == Role.PRE_USER
-                ? "/signup/set-username"
-                : "/main";
+        var user = principal.getUser();
+        String targetUrl;
+        if (user.getUsername().startsWith("TEMP_")) {
+            targetUrl = "/signup/set-username";
+        } else if (user.getDisplayName() == null) {
+            targetUrl = "/signup/set-display-name";
+        } else {
+            targetUrl = "/main";
+        }
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
 

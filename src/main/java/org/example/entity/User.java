@@ -37,11 +37,11 @@ public class User {
     @Column(name = "social_type")
     private String socialType;
 
-    @Column(name = "username",  length = 50, nullable = false, unique = true)
+    @Column(name = "username", length = 50, nullable = false, unique = true)
     private String username;
 
-//    private String name;
-    // ---> 실명은 굳이 입력할 이유가 없다!
+    @Column(name = "display_name", length = 50)
+    private String displayName;
 
     @Column(unique = true)
     private String email;
@@ -71,14 +71,16 @@ public class User {
     // OAuth 제공자 ID
     private String providerId;
 
-    // OAuth 가입했을 시 따로 username 입력받은 경우 써먹음
-    public void updateUsernameAndRole(String username, Role role) {
-        this.username = username;
-        this.role = role;
-    }
-
     public void updateUsername(String username) {
         this.username = username;
+    }
+
+    public void updateDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void promoteToUser() {
+        this.role = Role.USER;
     }
 
     public void updatePassword(String encodedPassword) {

@@ -35,14 +35,15 @@ public class SecurityConfig {
                                 "/login",
                                 "/signup",
                                 "/api/v1/users",
-                                "/signup/set-username").permitAll() // 이 경로에만 로그인 없이 접근 가능
+                                "/signup/set-username",
+                                "/signup/set-display-name").permitAll()
 //                        .requestMatchers("/", "/h2-console/**").permitAll() // 이 경로에만 로그인 없이 접근 가능
                         .anyRequest().authenticated() // 다른 요청들은 로그인 필요
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .usernameParameter("email")
+                        .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/main")
                 )

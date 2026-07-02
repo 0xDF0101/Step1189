@@ -50,6 +50,7 @@ class UserControllerTest {
                  {
                      "email": "asdf@email.com",
                      "username": "eugene",
+                     "displayName": "유진",
                      "password": "qwer1234"
                  }
                 """;

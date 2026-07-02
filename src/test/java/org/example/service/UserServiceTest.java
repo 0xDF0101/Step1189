@@ -52,7 +52,7 @@ class UserServiceTest {
     String password = "password123";
     @BeforeEach
     void set() {
-        dto = new UserCreateRequest(email, username, password);
+        dto = new UserCreateRequest(email, username, "테스트유저", password);
     }
 
 

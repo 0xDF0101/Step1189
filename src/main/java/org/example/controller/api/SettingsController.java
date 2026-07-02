@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.dto.user.DisplayNameChangeRequest;
 import org.example.dto.user.PasswordChangeRequest;
 import org.example.dto.user.UserInfo;
 import org.example.dto.user.UsernameChangeRequest;
@@ -28,6 +29,13 @@ public class SettingsController {
     public ResponseEntity<Void> changeUsername(@LoginUser Long userId,
                                                @Valid @RequestBody UsernameChangeRequest request) {
         userService.changeUsername(userId, request.username());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/api/v1/settings/display-name")
+    public ResponseEntity<Void> changeDisplayName(@LoginUser Long userId,
+                                                  @Valid @RequestBody DisplayNameChangeRequest request) {
+        userService.changeDisplayName(userId, request.displayName());
         return ResponseEntity.ok().build();
     }
 

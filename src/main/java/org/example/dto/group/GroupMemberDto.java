@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public record GroupMemberDto(
         Long userId,
-        String username,
+        String displayName,
         String role,
         LocalDateTime joinedAt
 ) {}

@@ -2,6 +2,6 @@ package org.example.dto.group;
 
 public record MemberRankingDto(
         Long userId,
-        String username,
+        String displayName,
         int value
 ) {}

@@ -2,7 +2,7 @@ package org.example.dto.group;
 
 public record MemberGoalProgressDto(
         Long userId,
-        String username,
+        String displayName,
         int readInPeriod,
         int targetChapters,
         double percent

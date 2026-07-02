@@ -95,7 +95,7 @@ public class GroupService {
         List<MemberRankingDto> totalRankings = members.stream()
                 .map(m -> new MemberRankingDto(
                         m.getUser().getId(),
-                        m.getUser().getUsername(),
+                        m.getUser().getDisplayName(),
                         dailyProgressRepository.sumAllChaptersByUserId(m.getUser().getId())
                 ))
                 .sorted(Comparator.comparingInt(MemberRankingDto::value).reversed())
@@ -104,7 +104,7 @@ public class GroupService {
         List<MemberRankingDto> weeklyRankings = members.stream()
                 .map(m -> new MemberRankingDto(
                         m.getUser().getId(),
-                        m.getUser().getUsername(),
+                        m.getUser().getDisplayName(),
                         dailyProgressRepository.sumChaptersInPeriod(m.getUser().getId(), weekStart, today)
                 ))
                 .sorted(Comparator.comparingInt(MemberRankingDto::value).reversed())
@@ -113,7 +113,7 @@ public class GroupService {
         List<MemberRankingDto> streakRankings = members.stream()
                 .map(m -> new MemberRankingDto(
                         m.getUser().getId(),
-                        m.getUser().getUsername(),
+                        m.getUser().getDisplayName(),
                         calculateStreak(m.getUser().getId())
                 ))
                 .sorted(Comparator.comparingInt(MemberRankingDto::value).reversed())
@@ -128,7 +128,7 @@ public class GroupService {
                                 int target = goal.getTargetChaptersPerPerson();
                                 double pct = target > 0 ? Math.min((double) read / target * 100, 100.0) : 0.0;
                                 return new MemberGoalProgressDto(
-                                        m.getUser().getId(), m.getUser().getUsername(), read, target, pct);
+                                        m.getUser().getId(), m.getUser().getDisplayName(), read, target, pct);
                             })
                             .sorted(Comparator.comparingDouble(MemberGoalProgressDto::percent).reversed())
                             .toList();
@@ -139,7 +139,7 @@ public class GroupService {
 
         List<GroupMemberDto> memberDtos = members.stream()
                 .map(m -> new GroupMemberDto(
-                        m.getUser().getId(), m.getUser().getUsername(),
+                        m.getUser().getId(), m.getUser().getDisplayName(),
                         m.getRole().name(), m.getJoinedAt()))
                 .toList();
 

@@ -284,16 +284,29 @@
         <div class="avatar" id="avatarInitial">?</div>
         <div class="profile-info">
             <p class="profile-name" id="profileName">로딩 중...</p>
+            <p class="profile-email" id="profileHandle" style="font-size:0.82rem;color:#868e96;margin:2px 0 4px;"></p>
             <p class="profile-email" id="profileEmail"></p>
             <span class="badge" id="loginBadge"></span>
         </div>
     </div>
 
-    <!-- 닉네임 변경 -->
+    <!-- 표시 이름 변경 -->
     <div class="section-card">
-        <div class="section-title">닉네임 변경</div>
+        <div class="section-title">표시 이름 변경</div>
+        <p style="font-size:0.82rem;color:#6b7280;margin:-8px 0 14px;">다른 사용자에게 보여지는 이름이에요.</p>
         <div class="input-group">
-            <input type="text" id="newUsername" placeholder="새 닉네임 (4~20자)" maxlength="20">
+            <input type="text" id="newDisplayName" placeholder="표시 이름 (2~20자)" maxlength="20">
+        </div>
+        <button class="btn btn-primary" onclick="changeDisplayName()">변경하기</button>
+        <p class="msg" id="displayNameMsg"></p>
+    </div>
+
+    <!-- 아이디 변경 -->
+    <div class="section-card">
+        <div class="section-title">아이디 변경</div>
+        <p style="font-size:0.82rem;color:#6b7280;margin:-8px 0 14px;">로그인 시 사용되는 아이디예요. 영문, 숫자, -, _만 사용 가능합니다.</p>
+        <div class="input-group">
+            <input type="text" id="newUsername" placeholder="새 아이디 (4~20자)" maxlength="20">
         </div>
         <button class="btn btn-primary" onclick="changeUsername()">변경하기</button>
         <p class="msg" id="usernameMsg"></p>
@@ -373,8 +386,10 @@
         if (!res.ok) return;
         const user = await res.json();
 
-        document.getElementById('avatarInitial').textContent = user.nickname.charAt(0).toUpperCase();
-        document.getElementById('profileName').textContent = user.nickname;
+        const name = user.displayName || user.username;
+        document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
+        document.getElementById('profileName').textContent = user.displayName;
+        document.getElementById('profileHandle').textContent = '@' + user.username;
         document.getElementById('profileEmail').textContent = user.email;
 
         const badge = document.getElementById('loginBadge');
@@ -394,6 +409,27 @@
         el.className = 'msg ' + (isSuccess ? 'success' : 'error');
     }
 
+    async function changeDisplayName() {
+        const displayName = document.getElementById('newDisplayName').value.trim();
+        setMsg('displayNameMsg', '', true);
+
+        const res = await fetch('/api/v1/settings/display-name', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ displayName })
+        });
+
+        if (res.ok) {
+            setMsg('displayNameMsg', '표시 이름이 변경되었습니다.', true);
+            document.getElementById('profileName').textContent = displayName;
+            document.getElementById('avatarInitial').textContent = displayName.charAt(0).toUpperCase();
+            document.getElementById('newDisplayName').value = '';
+        } else {
+            const errors = await res.json();
+            setMsg('displayNameMsg', errors[0]?.message || '변경에 실패했습니다.', false);
+        }
+    }
+
     async function changeUsername() {
         const username = document.getElementById('newUsername').value.trim();
         setMsg('usernameMsg', '', true);
@@ -405,9 +441,8 @@
         });
 
         if (res.ok) {
-            setMsg('usernameMsg', '닉네임이 변경되었습니다.', true);
-            document.getElementById('profileName').textContent = username;
-            document.getElementById('avatarInitial').textContent = username.charAt(0).toUpperCase();
+            setMsg('usernameMsg', '아이디가 변경되었습니다.', true);
+            document.getElementById('profileHandle').textContent = '@' + username;
             document.getElementById('newUsername').value = '';
         } else {
             const errors = await res.json();

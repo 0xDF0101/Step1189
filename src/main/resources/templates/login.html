@@ -161,13 +161,13 @@
     <p class="subtitle">나만의 성경 읽기 페이스메이커<br>1,189장의 여정을 함께해요</p>
 
     <div th:if="${param.error}" class="error-msg">
-        이메일 또는 비밀번호가 맞지 않아요. 😢
+        아이디 또는 비밀번호가 맞지 않아요. 다시 확인해주세요.
     </div>
 
     <form th:action="@{/login}" method="post">
         <div class="form-group">
-            <label>이메일 주소</label>
-            <input type="email" name="email" placeholder="example@email.com" required autocomplete="username">
+            <label>아이디 (@username)</label>
+            <input type="text" name="username" placeholder="username" required autocomplete="username">
         </div>
         <div class="form-group">
             <label>비밀번호</label>

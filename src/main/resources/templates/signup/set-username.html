@@ -4,196 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Step 1189 - 아이디 설정</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
     <style>
-        /* 기본 리셋 및 폰트 설정 */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+        body { background: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
-        body {
-            background-color: #f8f9fa; /* PC에서 볼 때 배경은 살짝 회색 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        /* 📱 모바일 화면 컨테이너 (유진이의 스케치 틀) */
-        .mobile-container {
+        .container {
             width: 100%;
-            max-width: 430px; /* 아이폰 Pro Max 크기 한계선 */
-            height: 100vh;
-            background-color: #ffffff;
-            padding: 40px 24px;
+            max-width: 430px;
+            min-height: 100vh;
+            background: #fff;
+            padding: 48px 24px 40px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
         }
 
-        /* 제목 스타일 */
-        h1 {
-            font-size: 22px;
-            font-weight: 700;
-            color: #212529;
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             margin-bottom: 40px;
-            text-align: center;
-            line-height: 1.4;
-            word-break: keep-all;
         }
+        .step-dot { width: 8px; height: 8px; border-radius: 50%; background: #e9ecef; }
+        .step-dot.active { background: #2ea44f; width: 24px; border-radius: 4px; }
 
-        /* 입력 폼 그룹 */
-        .form-group {
-            margin-bottom: 32px;
-        }
+        .logo { font-size: 1rem; font-weight: 700; color: #2ea44f; margin-bottom: 32px; }
 
-        label {
-            display: block;
-            font-size: 15px;
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 10px;
-        }
+        h1 { font-size: 1.5rem; font-weight: 800; color: #212529; line-height: 1.4; margin-bottom: 8px; word-break: keep-all; }
+        .subtitle { font-size: 0.9rem; color: #868e96; margin-bottom: 36px; line-height: 1.5; word-break: keep-all; }
 
-        /* 텍스트 입력창 */
+        .form-group { margin-bottom: 8px; }
+        label { display: block; font-size: 0.83rem; font-weight: 600; color: #495057; margin-bottom: 8px; }
+
         input[type="text"] {
             width: 100%;
             padding: 16px;
-            font-size: 16px;
+            font-size: 1rem;
             border: 2px solid #e9ecef;
             border-radius: 12px;
             outline: none;
-            transition: all 0.2s ease-in-out;
+            transition: all 0.2s;
+            color: #212529;
         }
+        input[type="text"]:focus { border-color: #2ea44f; background: #f0fff4; }
+        input[type="text"]::placeholder { color: #adb5bd; }
 
-        input[type="text"]::placeholder {
-            color: #adb5bd;
-        }
+        .hint { font-size: 0.78rem; color: #adb5bd; margin-top: 8px; padding-left: 2px; line-height: 1.5; }
+        .error-msg { font-size: 0.78rem; color: #fa5252; margin-top: 6px; padding-left: 2px; min-height: 18px; }
 
-        /* 🌿 입력창 클릭(포커스) 시 우리 시그니처 초록색으로 변경! */
-        input[type="text"]:focus {
-            border-color: #2ea44f;
-            background-color: #f0fff4; /* 아주 연한 초록 배경 */
-        }
-
-        /* 버튼 스타일 */
         .btn-continue {
             width: 100%;
-            padding: 18px;
-            font-size: 16px;
+            padding: 17px;
+            font-size: 1rem;
             font-weight: 700;
-            color: #ffffff;
-            background-color: #2ea44f; /* 시그니처 초록색 */
+            color: #fff;
+            background: #2ea44f;
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background 0.2s;
+            margin-top: auto;
+            box-shadow: 0 4px 12px rgba(46,164,79,0.2);
         }
-
-        .btn-continue:hover {
-            background-color: #269044; /* 마우스 올리면 살짝 짙어짐 */
-        }
-
-        /* 나중에 자바스크립트로 띄워줄 피드백 메시지용 */
-        .feedback-msg {
-            font-size: 13px;
-            margin-top: 8px;
-            display: none; /* 평소엔 숨김 */
-        }
-        .text-success { color: #2ea44f; display: block; }
-        .text-error { color: #e03131; display: block; }
-
-        .error-message {
-            color: red;
-            font-size: 0.8em;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
+        .btn-continue:hover { background: #269044; }
+        .btn-continue:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
+<div class="container">
+    <div class="step-indicator">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+    </div>
 
-<div class="mobile-container">
-    <h1>사용할 이름을 입력해주세요</h1>
+    <p class="logo">Step 1189 🌿</p>
+    <h1>사용할 아이디를<br>입력해주세요</h1>
+    <p class="subtitle">로그인 시 사용되는 아이디예요.<br>영문, 숫자, -, _를 사용할 수 있습니다.</p>
 
-    <form th:action="@{/api/v1/users/username}" method="post" id="signupForm">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="username" required autocomplete="off">
-            <div id="username-error" class="error-message"></div>
-        </div>
+    <div class="form-group">
+        <label for="username">아이디 (@username)</label>
+        <input type="text" id="username" name="username" placeholder="my_username" required autocomplete="off" maxlength="20">
+        <p class="hint">4~20자, 영문·숫자·하이픈(-)·언더바(_)만 가능</p>
+        <p class="error-msg" id="username-error"></p>
+    </div>
 
-        <button type="submit" class="btn-continue">Continue</button>
-    </form>
+    <button class="btn-continue" onclick="submit()">다음으로</button>
 </div>
 
 <script>
-    document.getElementById('signupForm').addEventListener('submit', function (e) {
-        e.preventDefault(); // 이게 여기 붙는게 맞나?
+    const usernameInput = document.getElementById('username');
 
-        const username = document.getElementById('username').value;
+    usernameInput.addEventListener('input', () => {
+        usernameInput.value = usernameInput.value.replace(/[^a-zA-Z0-9_-]/g, '');
+        document.getElementById('username-error').textContent = '';
+    });
+
+    async function submit() {
+        const username = usernameInput.value.trim();
+        const errorEl = document.getElementById('username-error');
+        errorEl.textContent = '';
+
+        if (username.length < 4) {
+            errorEl.textContent = '아이디는 4자 이상이어야 합니다.';
+            return;
+        }
+
         const params = new URLSearchParams();
         params.append('username', username);
 
-        fetch('/api/v1/users/username', {
-            method: 'POST',
-            // headers: {'Content-type': 'application/x-www-form-urlencoded'}
-            // ---> 이건 디폴트라 굳이 설정 안해도 됨
-            body: params
-        }).then(async response => {
-            const errorElement = document.getElementById("username-error");
-            errorElement.innerText = "";
-            if(response.ok) {
-                alert("가입 완료! 🌿");
-                window.location.href = "/main";
-            } else {
-                const errorData = await response.json();
+        const res = await fetch('/api/v1/users/username', { method: 'POST', body: params });
 
-                if (response.status === 400 || response.status === 409) {
-                    Object.keys(errorData).forEach(field => {
-                        const errorElement = document.getElementById(`${field}-error`);
-                        if (errorElement) {
-                            errorElement.innerText = errorData[field];
-                        }fetch('/api/v1/users/username', {
-                            method: 'POST',
-                            // headers: {'Content-type': 'application/x-www-form-urlencoded'}
-                            // ---> 이건 디폴트라 굳이 설정 안해도 됨
-                            body: params
-                        }).then(async response => {
-                            const errorElement = document.getElementById("username-error");
-                            errorElement.innerText = "";
-                            if(response.ok) {
-                                alert("가입 완료! 🌿");
-                                window.location.href = "/main";
-                            } else {
-                                const errorData = await response.json();
-                                if (response.status === 400 || response.status === 409) {
-                                    errorData.forEach(error => {
-                                        const errorElement = document.getElementById(`${error.field}-error`);
-                                        if (errorElement) {
-                                            errorElement.innerText = error.message;
-                                        }
-                                    });
-                                } else {
-                                    alert("서버 오류가 발생했습니다.");
-                                }
-                            }
-                        }).catch(error => {
-                            console.error("Error : ", error);
-                        })
-                    });
-                } else {
-                    // 이메일 에러가 아닌 다른 알 수 없는 에러일 때
-                    alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-                }
-            }
-        }).catch(error => {
-            console.error("Error : ", error);
-        })
-    })
+        if (res.ok) {
+            window.location.href = '/signup/set-display-name';
+        } else {
+            const errors = await res.json();
+            errorEl.textContent = errors[0]?.message || '사용할 수 없는 아이디입니다.';
+        }
+    }
 </script>
-
 </body>
 </html>

@@ -35,34 +35,32 @@ class CustomUserDetailServiceTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("해당 이메일이 존재하지 않을 경우 예외처리")
+    @DisplayName("해당 username이 존재하지 않을 경우 예외처리")
     void not_found_exception() {
+        String username = "unknown_user";
 
-        String email = "example@example.com";
-
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> {
-            customUserDetailService.loadUserByUsername(email);
+            customUserDetailService.loadUserByUsername(username);
         });
     }
 
     @Test
-    @DisplayName("해당 이메일의 사용자가 존재하면 CustomUserDetails을 반환")
+    @DisplayName("해당 username의 사용자가 존재하면 CustomUserDetails을 반환")
     void return_customUserDetails() {
-        String email = "example@example.com";
+        String username = "testuser";
         User user = User.builder()
-                        .username("username")
+                        .username(username)
                         .role(Role.USER)
-                        .email(email)
+                        .email("example@example.com")
                         .build();
-        when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(user));
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
-        UserDetails result = customUserDetailService.loadUserByUsername(email);
+        UserDetails result = customUserDetailService.loadUserByUsername(username);
 
         assertEquals(result.getUsername(), user.getEmail());
         assertTrue(result.getAuthorities().toString().contains("USER"));
-
     }
 
 }

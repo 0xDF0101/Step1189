@@ -50,16 +50,31 @@ public class UserController {
     }
 
     /**
-     * OAuth로 회원가입 시 username을 따로 입력받는 컨트롤러
+     * OAuth 1단계: @handle 설정
      */
     @PostMapping("/api/v1/users/username")
-    public ResponseEntity<Void> setUsername(@NotBlank @Size(min=4, max=20) @RequestParam("username") String username,
-                                            @LoginUser Long userId) {
-
-        log.debug("입력받은 아이디 : {}", username);
+    public ResponseEntity<Void> setUsername(
+            @NotBlank(message = "아이디를 입력해주세요")
+            @Size(min = 4, max = 20, message = "아이디는 4~20자여야 합니다")
+            @jakarta.validation.constraints.Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "영문, 숫자, -, _만 사용할 수 있습니다")
+            @RequestParam("username") String username,
+            @LoginUser Long userId) {
 
         userService.updateUsername(userId, username);
+        return ResponseEntity.ok().build();
+    }
 
+    /**
+     * OAuth 2단계: 표시 이름 설정
+     */
+    @PostMapping("/api/v1/users/display-name")
+    public ResponseEntity<Void> setDisplayName(
+            @NotBlank(message = "표시 이름을 입력해주세요")
+            @Size(min = 2, max = 20, message = "표시 이름은 2~20자여야 합니다")
+            @RequestParam("displayName") String displayName,
+            @LoginUser Long userId) {
+
+        userService.setDisplayName(userId, displayName);
         return ResponseEntity.ok().build();
     }
 }
