@@ -27,6 +27,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/signup/set-display-name").setViewName("signup/set-display-name");
         registry.addViewController("/plan").setViewName("plan");
         registry.addViewController("/settings").setViewName("settings");
+        registry.addViewController("/search").setViewName("search");
+        registry.addViewController("/follows").setViewName("follows");
     }
 
     // ArgumentResolver 등록
