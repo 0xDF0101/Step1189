@@ -46,6 +46,11 @@ jobs:
           push: true
           tags: ghcr.io/0xdf0101/step1189:latest
 
+      - name: Debug secret length
+        run: echo "length=${#SSH_KEY}, lines=$(echo "$SSH_KEY" | wc -l)"
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
