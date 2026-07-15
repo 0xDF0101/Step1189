@@ -1,6 +1,6 @@
 services:
   step1189-server:
-    build: .
+    image: ghcr.io/0xdf0101/step1189:latest # ghcr.io에서 이미지만 pull 받아서 사용함
     container_name: step1189-server
     expose:
       - "8080"
