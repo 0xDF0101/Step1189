@@ -58,8 +58,8 @@ jobs:
             set -e
             export PATH="/usr/local/bin:/opt/homebrew/bin:$PATH"
             export DOCKER_HOST="unix:///Users/server-admin/.colima/default/docker.sock"
-#             이전 배포 프로세스 잔재 정리
-#            pkill -f "docker compose" || true
+            # 이전 배포 프로세스 잔재 정리
+            # pkill -f "docker compose" || true
             sleep 2
             cd ${{ secrets.DEPLOY_PATH }}
             git pull origin main
