@@ -30,7 +30,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/",
+                        .requestMatchers(
                                 "/h2-console/**",
                                 "/login",
                                 "/signup",
