@@ -14,11 +14,11 @@ spring:
       hibernate:
         format_sql: true # SQL을 보기좋게 정렬해서 보여줌
         dialect: org.hibernate.dialect.MySQL8Dialect
-  #    defer-datasource-initialization: true # Hibernate 초기화 후 data.sql 실행
+      defer-datasource-initialization: true # Hibernate 초기화 후 data.sql 실행
 
   sql:
     init:
-      mode: never # 이 설정을 always로 해두면 data.sql이 항상 꽂힌다.
+      mode: always # 성경 권, 장 데이터를 집어넣음
 
   security:
     oauth2:
