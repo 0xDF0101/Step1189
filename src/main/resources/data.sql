@@ -68,22 +68,22 @@ INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (64
 INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (65, '유다서', 'Jude', 1, 'NEW');
 INSERT INTO bibles (id, kor_name, eng_name, total_chapter, testament) VALUES (66, '요한계시록', 'Revelation', 22, 'NEW');
 
-INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id) VALUES ('Eugene', 'eugene@gmail.com', 'ADMIN', true, '끼얏호', 'google', '132434');
-INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id) VALUES ('Suin', 'suin@gmail.com', 'USER', true, '야호', 'naver', '234231');
-INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id, password) VALUES ('path__finder', 'eugene2@gmail.com', 'USER', true, '야호', 'naver', '234231', '$2a$10$EdJwZCPQCLCIqyIZh9l0COSnndqiwnsW8N6F0XHi9bkgUESR2JWRu');
-
--- 창세기 (1번 성경, 총 50장) : 앞부분 5장 정도 읽은 상태
-INSERT INTO progress (user_id, bible_id, is_completed, last_read_chapter, progress_data, created_at, updated_at)
-VALUES (1, 1, false, 5, '1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0', NOW(), NOW());
-
--- 마태복음 (40번 성경, 총 28장) : 중간중간 읽은 상태
-INSERT INTO progress (user_id, bible_id, is_completed, last_read_chapter, progress_data, created_at, updated_at)
-VALUES (1, 40, false, 10, '1,0,1,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0', NOW(), NOW());
-
--- 시편 (19번 성경, 총 150장 중 일부) : 150장짜리는 데이터가 너무 기니 10장 읽은 걸로 예시
-INSERT INTO progress (user_id, bible_id, is_completed, last_read_chapter, progress_data, created_at, updated_at)
-VALUES (1, 19, false, 3, '1,1,1,0,0,0,0,0,0,0', NOW(), NOW());
--- (실제 시편은 150개의 0이 필요하지만 예시로 짧게 적었어!)
+-- INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id) VALUES ('Eugene', 'eugene@gmail.com', 'ADMIN', true, '끼얏호', 'google', '132434');
+-- INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id) VALUES ('Suin', 'suin@gmail.com', 'USER', true, '야호', 'naver', '234231');
+-- INSERT INTO users(username, email, role, is_public, status_message, social_type, provider_id, password) VALUES ('path__finder', 'eugene2@gmail.com', 'USER', true, '야호', 'naver', '234231', '$2a$10$EdJwZCPQCLCIqyIZh9l0COSnndqiwnsW8N6F0XHi9bkgUESR2JWRu');
+--
+-- -- 창세기 (1번 성경, 총 50장) : 앞부분 5장 정도 읽은 상태
+-- INSERT INTO progress (user_id, bible_id, is_completed, last_read_chapter, progress_data, created_at, updated_at)
+-- VALUES (1, 1, false, 5, '1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0', NOW(), NOW());
+--
+-- -- 마태복음 (40번 성경, 총 28장) : 중간중간 읽은 상태
+-- INSERT INTO progress (user_id, bible_id, is_completed, last_read_chapter, progress_data, created_at, updated_at)
+-- VALUES (1, 40, false, 10, '1,0,1,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0', NOW(), NOW());
+--
+-- -- 시편 (19번 성경, 총 150장 중 일부) : 150장짜리는 데이터가 너무 기니 10장 읽은 걸로 예시
+-- INSERT INTO progress (user_id, bible_id, is_completed, last_read_chapter, progress_data, created_at, updated_at)
+-- VALUES (1, 19, false, 3, '1,1,1,0,0,0,0,0,0,0', NOW(), NOW());
+-- -- (실제 시편은 150개의 0이 필요하지만 예시로 짧게 적었어!)
 
 -- MySQL 문법임!!!!!!!!!!
 -- -- 1년 전부터 오늘까지 랜덤하게 잔디 심기 (약 100일치 예시)
