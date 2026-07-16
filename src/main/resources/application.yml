@@ -18,7 +18,7 @@ spring:
 
   sql:
     init:
-      mode: always # 성경 권, 장 데이터를 집어넣음
+      mode: never # 성경 권, 장 데이터를 집어넣음
 
   security:
     oauth2:
